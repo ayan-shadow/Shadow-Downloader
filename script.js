@@ -1,60 +1,81 @@
 const analyzeBtn = document.getElementById('analyzeBtn');
+const loader = document.getElementById('loader');
 const progressBar = document.getElementById('progressBar');
-const progressContainer = document.getElementById('progressContainer');
 const results = document.getElementById('results');
 const error = document.getElementById('error');
 const videoUrl = document.getElementById('videoUrl');
 
-// API LINK (Render)
-const API_BASE = "https://shadow-api-8f1u.onrender.com/api/download?url=";
+// ✅ YOUR RAPIDAPI CREDENTIALS
+const RAPID_API_KEY = "1ab09c6cccmsb3b437c4d2ebc0f0p1d517ejsn76f2c44d23d7";
+const RAPID_API_HOST = "youtube-video-fast-downloader-24-7.p.rapidapi.com";
 
 analyzeBtn.addEventListener('click', async () => {
     const url = videoUrl.value.trim();
-    if (!url) return;
+    if (!url) return alert("Please provide a valid link, Boss.");
 
-    // UI Reset
+    // Initial UI State
     results.classList.add('hidden');
     error.classList.add('hidden');
-    progressContainer.classList.remove('hidden');
+    loader.classList.remove('hidden');
     
-    // Animation
-    let progress = 0;
-    const interval = setInterval(() => {
-        progress += (progress < 90) ? 2 : 0.1;
-        progressBar.style.width = progress + "%";
-    }, 100);
+    let p = 0;
+    const interval = setInterval(() => { 
+        p += 5; 
+        progressBar.style.width = p + "%"; 
+        if (p >= 90) clearInterval(interval); 
+    }, 120);
 
     try {
-        const response = await fetch(`${API_BASE}${encodeURIComponent(url)}`);
-        const data = await response.json();
+        // Universal API Fetch (Supports Photo & Video)
+        const response = await fetch(`https://${RAPID_API_HOST}/get-video-info?url=${encodeURIComponent(url)}`, {
+            method: 'GET',
+            headers: {
+                'x-rapidapi-key': RAPID_API_KEY,
+                'x-rapidapi-host': RAPID_API_HOST
+            }
+        });
 
+        const data = await response.json();
         clearInterval(interval);
         progressBar.style.width = "100%";
 
-        setTimeout(() => {
-            progressContainer.classList.add('hidden');
-            if (data.success) {
+        if (data && data.status === "ok") {
+            setTimeout(() => {
+                loader.classList.add('hidden');
                 results.classList.remove('hidden');
+                
+                // Detection for Photo or Video
+                const isPhoto = data.url.length === 1 && data.url[0].type === "jpg";
+
                 results.innerHTML = `
-                    <div class="glass p-6 rounded-[2.5rem] border-blue-500/20 text-center animate-in fade-in duration-500">
-                        <img src="${data.info.thumbnail}" class="w-full max-w-sm mx-auto rounded-2xl mb-6 shadow-2xl">
-                        <h2 class="text-lg font-bold mb-6 font-gaming tracking-tight">${data.info.title}</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            ${data.links.map(l => `
-                                <a href="${l.url}" target="_blank" class="bg-blue-600/10 border border-blue-500/30 p-4 rounded-xl font-bold uppercase text-[10px] tracking-widest hover:bg-blue-600 hover:text-white transition-all">
-                                    Download ${l.quality} (${l.format})
+                    <div class="glass p-8 rounded-[3rem] border-blue-500/10 text-center animate-in fade-in slide-in-from-bottom-10 duration-700">
+                        <div class="relative group mb-8">
+                            <img src="${data.thumb}" class="w-full max-w-sm mx-auto rounded-[2rem] shadow-2xl group-hover:scale-[1.02] transition-transform duration-500">
+                            <div class="absolute inset-0 rounded-[2rem] bg-gradient-to-t from-black/60 to-transparent"></div>
+                        </div>
+                        
+                        <h2 class="text-xl font-bold mb-8 font-gaming tracking-tight px-4 leading-tight">${data.title}</h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 px-4">
+                            ${data.url.map(link => `
+                                <a href="${link.url}" target="_blank" rel="nofollow" 
+                                   class="bg-white/5 hover:bg-blue-600 border border-white/5 hover:border-blue-500 p-5 rounded-2xl font-bold uppercase text-[10px] tracking-widest transition-all duration-300 flex items-center justify-between group">
+                                    <span>${link.quality} ${link.ext.toUpperCase()}</span>
+                                    <i class="fas fa-download opacity-40 group-hover:opacity-100 group-hover:translate-y-1 transition-all"></i>
                                 </a>
                             `).join('')}
                         </div>
+                        <p class="mt-8 text-[9px] text-gray-600 font-gaming uppercase tracking-[0.2em]">Source Detected: ${isPhoto ? 'Static Image' : 'Digital Motion Stream'}</p>
                     </div>`;
-            } else {
-                throw new Error("Server is Busy. Please try again after 1 minute.");
-            }
-        }, 500);
+            }, 600);
+        } else {
+            throw new Error("Target Protected. RapidAPI cannot bypass this specific link.");
+        }
+
     } catch (err) {
         clearInterval(interval);
-        progressContainer.classList.add('hidden');
+        loader.classList.add('hidden');
         error.classList.remove('hidden');
-        document.getElementById('errorMessage').innerText = err.message;
+        document.getElementById('errorMessage').innerText = "Access Denied: " + err.message;
     }
 });
