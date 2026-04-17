@@ -3,108 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <meta name="google-site-verification" content="NgnUCfNFkaWbmSnfBcTLw8Cus_POEGJyJrSyiaaUaHU" />
-
-    <title>AyanX Downloader | Ultimate 4K Video & Photo Grabber</title>
-    <meta name="description" content="AyanX Protocol: The fastest way to download 4K Videos, Reels, and High-Res Photos from YouTube, Instagram, and Facebook. Secure, Fast, and Free.">
-    <meta name="keywords" content="AyanX, Video Downloader, Photo Downloader, Instagram Reel Downloader, 4K Media, AyanX Protocol">
-    <meta name="author" content="AyanX">
-    <link rel="canonical" href="https://ayanx-downloader.vercel.app">
-
+    
+    <title>AyanX Downloader | Free 4K Video & Photo Grabber</title>
+    
     <script type='text/javascript' src='//pl26073702.highcpmgate.com/8a/91/3a/8a913a4471f654b8883fa848f37fea48.js'></script>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
     <style>
-        :root { --neon-blue: #3b82f6; --neon-purple: #9333ea; }
-        body { font-family: 'Inter', sans-serif; background: #020202; color: white; overflow-x: hidden; }
+        body { font-family: 'Inter', sans-serif; background: #050505; color: white; }
         .font-gaming { font-family: 'Orbitron', sans-serif; }
-        .glass { background: rgba(255, 255, 255, 0.01); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .gradient-text { background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .neon-border { border: 1px solid rgba(59, 130, 246, 0.2); box-shadow: 0 0 20px rgba(59, 130, 246, 0.05); }
-        .progress-bar { width: 0%; height: 3px; background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple)); transition: width 0.4s cubic-bezier(0.1, 0.7, 1.0, 0.1); border-radius: 10px; }
-        .glow-hover:hover { box-shadow: 0 0 30px rgba(59, 130, 246, 0.2); transform: translateY(-3px); }
-        .tab-active { border-bottom: 2px solid var(--neon-blue); color: var(--neon-blue); }
+        .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .gradient-text { background: linear-gradient(90deg, #3b82f6, #9333ea); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .neon-border { border: 1px solid rgba(59, 130, 246, 0.3); }
+        .progress-fill { width: 0%; height: 100%; background: #3b82f6; transition: 0.3s; box-shadow: 0 0 10px #3b82f6; }
     </style>
 </head>
-<body class="min-h-screen">
+<body class="min-h-screen p-4">
 
-    <div class="container mx-auto px-4 py-16 max-w-4xl relative">
-        <header class="text-center mb-16">
-            <h1 class="font-gaming text-7xl md:text-9xl font-black mb-4 tracking-tighter italic">
+    <div class="max-w-4xl mx-auto pt-12 text-center">
+        <header class="mb-12">
+            <h1 class="font-gaming text-7xl md:text-9xl font-black mb-2 tracking-tighter italic">
                 <span class="gradient-text">AYANX</span>
             </h1>
-            <div class="flex items-center justify-center gap-4 text-[10px] font-gaming text-gray-500 uppercase tracking-[0.5em]">
-                <span>Media</span>
-                <div class="h-1 w-1 bg-blue-500 rounded-full"></div>
-                <span>Nexus</span>
-                <div class="h-1 w-1 bg-purple-500 rounded-full"></div>
-                <span>Protocol</span>
-            </div>
+            <p class="text-gray-500 tracking-[0.4em] text-[10px] uppercase font-gaming">Universal Media Protocol</p>
         </header>
 
-        <div class="glass p-4 rounded-[2.5rem] mb-2 neon-border glow-hover transition-all duration-500">
-            <div class="flex flex-col md:flex-row gap-3">
-                <div class="flex-1 relative">
-                    <i class="fas fa-link absolute left-6 top-1/2 -translate-y-1/2 text-gray-600"></i>
-                    <input type="url" id="videoUrl" placeholder="Paste Video or Photo link here..." 
-                           class="w-full bg-transparent border-none outline-none pl-14 pr-6 py-5 text-white text-lg placeholder:text-gray-700">
-                </div>
-                <button id="analyzeBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-gaming px-12 py-5 rounded-[1.5rem] font-bold transition-all shadow-lg active:scale-95">
-                    ANALYZE
-                </button>
-            </div>
+        <div class="glass p-3 rounded-[2rem] mb-8 neon-border flex flex-col md:flex-row gap-2">
+            <input type="url" id="videoUrl" placeholder="Paste Video/Photo Link (YT, FB, Insta)..." class="flex-1 bg-transparent px-6 py-4 outline-none text-white text-lg">
+            <button id="analyzeBtn" class="bg-blue-600 hover:bg-blue-700 px-10 py-4 rounded-xl font-bold font-gaming transition-all">ANALYZE</button>
         </div>
 
-        <div id="loader" class="hidden w-full px-10 mt-6 mb-12">
-            <div class="w-full bg-white/5 rounded-full h-[2px] overflow-hidden">
-                <div id="progressBar" class="progress-bar"></div>
+        <div id="loader" class="hidden mb-8 px-10">
+            <div class="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                <div id="progressBar" class="progress-fill"></div>
             </div>
-            <p class="text-[8px] font-gaming text-blue-500 text-center mt-3 tracking-[0.3em] uppercase animate-pulse">Scanning Cloud Databases...</p>
+            <p class="text-[8px] font-gaming text-blue-500 mt-2 uppercase tracking-widest animate-pulse">Bypassing Encryption...</p>
         </div>
 
-        <div class="my-12">
-            <div class="glass rounded-[2rem] p-4 text-center border-dashed border-white/5">
-                <p class="text-[8px] text-gray-800 uppercase mb-4 font-gaming">Encrypted Ad Stream</p>
-                <div id="ad-slot" class="min-h-[90px] flex items-center justify-center overflow-hidden">
-                    <script type="text/javascript">
-                        atOptions = { 'key' : '8a913a4471f654b8883fa848f37fea48', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
-                    </script>
-                    <script type="text/javascript" src="//www.highperformanceformat.com/8a913a4471f654b8883fa848f37fea48/invoke.js"></script>
-                </div>
+        <div class="glass rounded-3xl p-4 mb-10 border-dashed border-white/5">
+            <div id="ad-slot" class="min-h-[90px] flex items-center justify-center">
+                <script type="text/javascript">
+                    atOptions = { 'key' : '8a913a4471f654b8883fa848f37fea48', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
+                </script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/8a913a4471f654b8883fa848f37fea48/invoke.js"></script>
             </div>
-        </div>
-
-        <div class="flex justify-center gap-8 mb-20 text-gray-600 text-xl">
-            <i class="fab fa-youtube hover:text-red-500 transition-colors"></i>
-            <i class="fab fa-instagram hover:text-pink-500 transition-colors"></i>
-            <i class="fab fa-facebook hover:text-blue-500 transition-colors"></i>
-            <i class="fab fa-tiktok hover:text-white transition-colors"></i>
         </div>
 
         <div id="results" class="hidden"></div>
+        <div id="error" class="hidden glass p-8 rounded-3xl border-red-500/20 text-red-400 font-gaming text-sm uppercase"></div>
 
-        <div id="error" class="hidden glass p-10 rounded-[2.5rem] border-red-500/20 text-center">
-            <i class="fas fa-exclamation-triangle text-red-500 text-3xl mb-4"></i>
-            <p id="errorMessage" class="text-red-400 text-sm font-gaming uppercase tracking-widest"></p>
-        </div>
-
-        <footer class="mt-40 pb-16 text-center">
-            <div class="h-[1px] w-full bg-gradient-to-r from-transparent via-white/5 to-transparent mb-12"></div>
-            <p class="font-gaming text-[11px] tracking-[0.5em] text-gray-600 mb-8 uppercase">
-                System Core: <span class="text-blue-500 font-bold">AyanX</span>
-            </p>
-            
-            <div class="max-w-2xl mx-auto glass p-10 rounded-[3rem] border-white/5 shadow-2xl">
-                <h3 class="font-gaming text-[10px] text-red-900 font-bold mb-4 uppercase tracking-[0.2em]">Universal Terms of Use</h3>
-                <p class="text-[10px] text-gray-500 leading-relaxed text-left opacity-60">
-                    AyanX Downloader is a gateway to public media. We do not store, host, or re-distribute files. All content is fetched in real-time from original sources. Users must respect international copyright laws.
-                </p>
-                <p class="mt-8 text-[9px] text-gray-700 font-gaming uppercase">© 2026 SHADOW NEXUS ARMY. ALL RIGHTS RESERVED.</p>
-            </div>
+        <footer class="mt-24 pb-10 opacity-40">
+            <p class="font-gaming text-[9px] tracking-[0.3em]">ARCHITECTURE BY <span class="text-blue-500">AYANX PROTOCOL</span></p>
         </footer>
     </div>
 
