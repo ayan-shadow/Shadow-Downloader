@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <title>AyanX Downloader | Free 4K Video & Reel Grabber</title>
-    <meta name="description" content="AyanX Downloader: Best tool for downloading YouTube Shorts, Instagram Reels, and Facebook videos for free. High-speed 4K media protocol by AyanX.">
-    <meta name="keywords" content="AyanX, Video Downloader, YouTube Downloader, Instagram Reel Downloader, Free 4K Video, AyanX Protocol">
+    <meta name="google-site-verification" content="NgnUCfNFkaWbmSnfBcTLw8Cus_POEGJyJrSyiaaUaHU" />
+
+    <title>AyanX Downloader | Professional 4K Video & Reel Grabber</title>
+    <meta name="description" content="AyanX Downloader: High-speed 4K media protocol for YouTube, Instagram, and Facebook. Download media safely and for free.">
+    <meta name="keywords" content="AyanX, Video Downloader, YouTube Downloader, Instagram Reel Downloader, AyanX Protocol">
     <meta name="author" content="AyanX">
     <link rel="canonical" href="https://ayanx-downloader.vercel.app">
 
@@ -21,94 +23,75 @@
         .font-gaming { font-family: 'Orbitron', sans-serif; }
         .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.05); }
         .gradient-text { background: linear-gradient(90deg, #3b82f6, #9333ea); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .glow-blue { box-shadow: 0 0 20px rgba(59, 130, 246, 0.1); }
+        .neon-glow { border: 1px solid rgba(59, 130, 246, 0.3); box-shadow: 0 0 20px rgba(59, 130, 246, 0.1); }
+        .progress-bar { width: 0%; height: 4px; background: linear-gradient(90deg, #3b82f6, #9333ea); transition: width 0.3s; border-radius: 10px; }
+        .btn-hover:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4); }
     </style>
 </head>
 <body class="min-h-screen">
 
-    <div id="warningPopup" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-xl">
-        <div class="glass p-8 rounded-[2.5rem] max-w-sm text-center border-red-500/30 mx-4">
-            <div class="text-red-500 text-5xl mb-4"><i class="fas fa-radiation"></i></div>
-            <h2 class="font-gaming text-xl font-bold mb-2 text-red-500">SYSTEM OVERLOAD</h2>
-            <p class="text-gray-400 text-sm mb-6">High-speed 4K servers are busy. Using AyanX Optimized 1080p Stream for instant access.</p>
-            <button onclick="document.getElementById('warningPopup').classList.add('hidden')" class="bg-red-600 text-white px-8 py-3 rounded-xl font-bold w-full shadow-lg">ACKNOWLEDGE</button>
-        </div>
-    </div>
-
     <div class="container mx-auto px-4 py-12 max-w-4xl relative">
         <header class="text-center mb-16">
-            <h1 class="font-gaming text-6xl md:text-8xl font-black mb-2">
+            <h1 class="font-gaming text-6xl md:text-8xl font-black mb-2 tracking-tighter">
                 <span class="gradient-text">AYANX</span>
             </h1>
             <p class="text-gray-500 tracking-[0.4em] text-[10px] uppercase font-gaming">Universal Media Protocol</p>
         </header>
 
-        <div class="glass p-3 rounded-[2.5rem] mb-10 border-white/10 glow-blue">
+        <div class="glass p-3 rounded-[2.5rem] mb-2 neon-glow transition-all">
             <div class="flex flex-col md:flex-row gap-2">
-                <input type="url" id="videoUrl" placeholder="Paste link here (YouTube, Insta, FB)..." class="flex-1 bg-transparent border-none outline-none px-6 py-4 text-white text-lg">
-                <button id="analyzeBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-gaming px-10 py-4 rounded-2xl font-bold transition-all">ANALYZE</button>
+                <input type="url" id="videoUrl" placeholder="Paste link here (YT, FB, Insta)..." class="flex-1 bg-transparent border-none outline-none px-6 py-4 text-white text-lg placeholder:text-gray-700">
+                <button id="analyzeBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-gaming px-10 py-4 rounded-2xl font-bold transition-all btn-hover">ANALYZE</button>
             </div>
         </div>
 
-        <div class="mb-12">
+        <div id="progressContainer" class="hidden w-full px-8 mb-10">
+            <div class="w-full bg-white/5 rounded-full h-1 mt-4 overflow-hidden">
+                <div id="progressBar" class="progress-bar"></div>
+            </div>
+            <p class="text-[8px] font-gaming text-blue-500 text-center mt-2 tracking-widest uppercase">Fetching Encrypted Stream...</p>
+        </div>
+
+        <div class="my-10">
             <div class="glass rounded-3xl p-4 text-center border-dashed border-white/5">
-                <p class="text-[9px] text-gray-700 uppercase mb-3 font-gaming">Secure Ad Stream</p>
-                <div id="ad-slot" class="min-h-[100px] flex items-center justify-center overflow-hidden">
+                <p class="text-[9px] text-gray-700 uppercase mb-3 font-gaming">Sponsored content</p>
+                <div id="ad-slot" class="min-h-[100px] flex items-center justify-center">
                     <script type="text/javascript">
-                        atOptions = {
-                            'key' : '8a913a4471f654b8883fa848f37fea48',
-                            'format' : 'iframe',
-                            'height' : 90,
-                            'width' : 728,
-                            'params' : {}
-                        };
+                        atOptions = { 'key' : '8a913a4471f654b8883fa848f37fea48', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
                     </script>
                     <script type="text/javascript" src="//www.highperformanceformat.com/8a913a4471f654b8883fa848f37fea48/invoke.js"></script>
                 </div>
             </div>
         </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16 text-center">
-            <div class="glass p-4 rounded-2xl border-white/5">
-                <i class="fab fa-youtube text-red-500 text-2xl mb-2"></i>
-                <p class="text-[10px] font-gaming uppercase opacity-60">YouTube</p>
-            </div>
-            <div class="glass p-4 rounded-2xl border-white/5">
-                <i class="fab fa-instagram text-pink-500 text-2xl mb-2"></i>
-                <p class="text-[10px] font-gaming uppercase opacity-60">Instagram</p>
-            </div>
-            <div class="glass p-4 rounded-2xl border-white/5">
-                <i class="fab fa-facebook text-blue-500 text-2xl mb-2"></i>
-                <p class="text-[10px] font-gaming uppercase opacity-60">Facebook</p>
-            </div>
-            <div class="glass p-4 rounded-2xl border-white/5">
-                <i class="fab fa-tiktok text-gray-300 text-2xl mb-2"></i>
-                <p class="text-[10px] font-gaming uppercase opacity-60">TikTok</p>
-            </div>
+        <div class="grid grid-cols-4 gap-4 mb-16 opacity-50 text-center">
+            <i class="fab fa-youtube text-xl"></i>
+            <i class="fab fa-instagram text-xl"></i>
+            <i class="fab fa-facebook text-xl"></i>
+            <i class="fab fa-tiktok text-xl"></i>
         </div>
 
-        <div id="loading" class="hidden text-center py-10"><div class="animate-spin h-10 w-10 border-4 border-blue-500 border-t-transparent rounded-full mx-auto"></div></div>
         <div id="results" class="hidden space-y-6"></div>
-        <div id="error" class="hidden glass p-8 rounded-[2rem] border-red-500/20 text-center"><p id="errorMessage" class="text-red-400 text-sm font-gaming uppercase"></p></div>
+
+        <div id="error" class="hidden glass p-8 rounded-[2rem] border-red-500/20 text-center">
+            <p id="errorMessage" class="text-red-400 text-sm font-gaming uppercase tracking-widest"></p>
+        </div>
 
         <footer class="mt-32 pb-12 text-center">
             <div class="h-[1px] w-full bg-gradient-to-r from-transparent via-white/10 to-transparent mb-12"></div>
-            
             <div class="flex flex-col items-center gap-6">
-                <p class="font-gaming text-xs tracking-[0.4em] uppercase">
-                    Architecture by <span class="text-blue-500 font-bold">AyanX</span>
-                </p>
+                <p class="font-gaming text-xs tracking-[0.4em] uppercase">Architecture by <span class="text-blue-500 font-bold">AyanX</span></p>
                 
                 <div class="flex flex-wrap justify-center gap-6 text-[9px] text-gray-600 uppercase tracking-[0.2em]">
-                    <span>Terms of Service</span>
-                    <span>Privacy Policy</span>
-                    <span>DMCA Report</span>
-                    <span>API Status</span>
+                    <span>High Speed</span>
+                    <span>No Logs</span>
+                    <span>Shadow Nexus</span>
                 </div>
 
                 <div class="max-w-xl glass p-8 rounded-[2.5rem] border-red-500/10 text-[10px] text-gray-500 leading-relaxed shadow-2xl">
-                    <p class="mb-4"><span class="text-red-900 font-bold uppercase tracking-widest block mb-1">Legal Disclaimer</span> AyanX Downloader does not host any content. We only provide a technical protocol to access publicly available media. Users are responsible for complying with copyright laws and platform terms.</p>
-                    <p class="opacity-40">© 2026 AYANX NEXUS PROTOCOL. ALL RIGHTS RESERVED.</p>
+                    <p class="mb-4 text-red-900 font-bold uppercase tracking-widest block">Legal System Disclaimer</p>
+                    <p class="text-left mb-2">AyanX Protocol is a technical interface. We do not host any content. Users must comply with platform terms and copyright laws.</p>
+                    <p class="opacity-40 tracking-widest uppercase mt-4">© 2026 AYANX NEXUS PROTOCOL. ALL RIGHTS RESERVED.</p>
                 </div>
             </div>
         </footer>
