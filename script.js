@@ -1,84 +1,87 @@
 const extractBtn = document.getElementById('extractBtn');
 const progressBar = document.getElementById('progressBar');
-const statusBox = document.getElementById('statusBox');
-const results = document.getElementById('results');
+const statusContainer = document.getElementById('statusContainer');
+const resultsArea = document.getElementById('resultsArea');
 const statusMsg = document.getElementById('statusMsg');
 const statusPercent = document.getElementById('statusPercent');
 
-// 🔑 APIS & KEYS
-const RAPID_KEY = "1ab09c6cccmsh3b437c4d2ebc0f0p1d517ejsn76f2c44d23d7";
-const RAPID_HOST = "youtube-video-fast-downloader-24-7.p.rapidapi.com";
-const COBALT_API = "https://api.cobalt.tools/api/json";
+// 🔑 EXACT API CONFIG FROM FRIEND'S FILE
+const API_URL = 'https://social-download-all-in-one.p.rapidapi.com/v1/social/autolink';
+const API_KEY = '29f8c3b79amshc7b9755d426320dp1b94fajsn62b1821d47db';
 
 extractBtn.addEventListener('click', async () => {
-    const url = document.getElementById('mediaUrl').value.trim();
-    if (!url) return;
+    const videoUrl = document.getElementById('mediaUrl').value.trim();
+    if (!videoUrl) return alert("Please enter a valid URL, Boss.");
 
     // Reset UI
-    results.classList.add('hidden');
-    statusBox.classList.remove('hidden');
-    updateProgress(10, "Establishing Proxy Handshake...");
+    resultsArea.classList.add('hidden');
+    statusContainer.classList.remove('hidden');
+    updateUI(20, "Establishing Secure Connection...");
 
     try {
-        // --- PHASE 1: RAPID PROXY (As per Friend's implementation) ---
-        updateProgress(40, "Decrypting Media Stream...");
-        let response = await fetch(`https://${RAPID_HOST}/get-video-info?url=${encodeURIComponent(url)}`, {
-            headers: { 'x-rapidapi-key': RAPID_KEY, 'x-rapidapi-host': RAPID_HOST }
+        // EXACT FETCH LOGIC FROM SOURCE [cite: 79, 80]
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-RapidAPI-Host': 'social-download-all-in-one.p.rapidapi.com',
+                'X-RapidAPI-Key': API_KEY
+            },
+            body: JSON.stringify({ url: videoUrl })
         });
-        let data = await response.json();
 
-        if (data && data.status === "ok") {
-            displayFinalResults(data.title, data.thumb, data.url);
-        } else {
-            // --- PHASE 2: COBALT FALLBACK (The VidMate Strategy) ---
-            updateProgress(70, "RapidAPI Bypassed. Routing via Cobalt...");
-            let cbRes = await fetch(COBALT_API, {
-                method: "POST",
-                headers: { "Accept": "application/json", "Content-Type": "application/json" },
-                body: JSON.stringify({ url: url, vQuality: "720" })
-            });
-            let cbData = await cbRes.json();
+        updateUI(60, "Bypassing Server Firewalls...");
 
-            if (cbData.url || cbData.status === "stream") {
-                displayFinalResults("AyanX Extracted Stream", cbData.url, [{url: cbData.url, quality: "High Definition", ext: "Media"}]);
-            } else {
-                throw new Error("Target Protected. All protocols failed.");
-            }
-        }
+        if (!response.ok) throw new Error("API Server Busy. Try again later.");
+        
+        const data = await response.json();
+        
+        if (data.error) throw new Error(data.message || "Target Protected.");
+
+        renderData(data);
     } catch (err) {
-        updateProgress(0, "Error: " + err.message);
-        alert("CRITICAL SYSTEM ALERT: " + err.message);
+        updateUI(0, "CRITICAL ERROR");
+        alert("SYSTEM ERROR: " + err.message);
     }
 });
 
-function updateProgress(p, msg) {
+function updateUI(p, msg) {
     progressBar.style.width = p + "%";
     statusMsg.innerText = msg;
     statusPercent.innerText = p + "%";
 }
 
-function displayFinalResults(title, thumb, links) {
-    updateProgress(100, "Layers Extracted Successfully.");
+function renderData(data) {
+    updateUI(100, "Decryption Successful.");
     setTimeout(() => {
-        statusBox.classList.add('hidden');
-        results.classList.remove('hidden');
-        
-        let linkHTML = Array.isArray(links) 
-            ? links.map(l => `
-                <a href="${l.url}" target="_blank" class="bg-blue-600/10 border border-blue-500/20 p-4 rounded-2xl flex justify-between items-center hover:bg-blue-600 transition-all group">
-                    <span class="font-gaming text-[9px] uppercase tracking-widest">${l.quality} ${l.ext.toUpperCase()}</span>
-                    <i class="fas fa-download opacity-50 group-hover:opacity-100"></i>
-                </a>`).join('')
-            : `<a href="${links}" target="_blank" class="bg-blue-600 p-5 rounded-2xl text-center font-gaming font-black uppercase tracking-widest">DOWNLOAD MEDIA</a>`;
+        statusContainer.classList.add('hidden');
+        resultsArea.classList.remove('hidden');
 
-        results.innerHTML = `
-            <div class="glass p-6 rounded-[2.5rem] border-white/5">
-                <img src="${thumb || 'https://via.placeholder.com/400x225/000000/FFFFFF?text=AYANX+SECURE+STREAM'}" class="w-full rounded-2xl mb-4 shadow-2xl">
-                <h3 class="font-gaming text-[11px] uppercase tracking-tight text-gray-400">${title}</h3>
-            </div>
-            <div class="flex flex-col gap-3 justify-center">
-                <p class="text-[8px] font-gaming text-blue-500 uppercase tracking-[0.4em] text-center mb-2">Decrypted Layers Available</p>
-                ${linkHTML}
+        // Logic to handle multiple medias from friend's code [cite: 92]
+        let mediaButtons = "";
+        if (data.medias && data.medias.length > 0) {
+            mediaButtons = data.medias.map(m => `
+                <a href="${m.url}" target="_blank" class="cyber-btn flex justify-between items-center p-5 rounded-2xl bg-blue-600/10 border border-blue-500/20 hover:bg-blue-600 transition-all group">
+                    <div class="flex flex-col text-left">
+                        <span class="font-gaming text-[10px] uppercase text-blue-400 group-hover:text-white">${m.quality}</span>
+                        <span class="text-[9px] opacity-40 uppercase">${m.extension} • ${m.type}</span>
+                    </div>
+                    <i class="fas fa-download opacity-30 group-hover:opacity-100 group-hover:translate-y-1 transition-all"></i>
+                </a>
+            `).join('');
+        }
+
+        resultsArea.innerHTML = `
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="cyber-card p-4 rounded-[2.5rem]">
+                    <img src="${data.thumbnail || ''}" class="w-full rounded-2xl shadow-2xl border border-white/5">
+                </div>
+                <div class="space-y-4">
+                    <h3 class="font-gaming text-sm uppercase mb-6 tracking-tighter">${data.title || "Media Extracted"}</h3>
+                    <div class="space-y-3">
+                        ${mediaButtons || '<p class="text-red-500 font-gaming text-xs">NO DOWNLOADABLE LAYERS FOUND</p>'}
+                    </div>
+                </div>
             </div>
         `;
     }, 800);

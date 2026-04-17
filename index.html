@@ -5,88 +5,111 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-site-verification" content="NgnUCfNFkaWbmSnfBcTLw8Cus_POEGJyJrSyiaaUaHU" />
     <title>AyanX | Universal Media Protocol</title>
-
-    <script type='text/javascript' src='//pl26073702.highcpmgate.com/8a/91/3a/8a913a4471f654b8883fa848f37fea48.js'></script>
     
+    <script type='text/javascript' src='//pl26073702.highcpmgate.com/8a/91/3a/8a913a4471f654b8883fa848f37fea48.js'></script>
+
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-black text-white">
+<body class="bg-black text-white selection:bg-blue-500">
 
-    <nav class="cyber-nav p-6 flex justify-between items-center sticky top-0 z-50">
-        <div class="logo font-gaming text-2xl font-black italic">AYANX<span class="text-blue-600">.</span></div>
-        <div class="settings flex gap-4 opacity-50 text-xs">
-            <span><i class="fas fa-server"></i> PROXY: ON</span>
-            <span><i class="fas fa-bolt"></i> TURBO: ACTIVE</span>
+    <nav class="p-6 border-b border-white/5 cyber-blur sticky top-0 z-50 flex justify-between items-center">
+        <div class="font-gaming text-2xl font-black italic tracking-tighter text-blue-500">AYANX</div>
+        <div class="flex gap-4">
+            <button onclick="toggleSettings()" class="text-xs uppercase font-gaming bg-white/5 px-4 py-2 rounded-lg border border-white/10 hover:bg-blue-600 transition-all">
+                <i class="fas fa-sliders-h mr-2"></i> Settings
+            </button>
         </div>
     </nav>
 
-    <main class="container mx-auto px-4 py-12 max-w-4xl">
-        <div class="text-center mb-12">
-            <h1 class="font-gaming text-6xl md:text-8xl font-black gradient-text italic mb-2">AYANX</h1>
-            <p class="tracking-[0.5em] text-[9px] uppercase font-bold text-blue-500">Global Media Extraction Protocol</p>
+    <div id="settingsPanel" class="hidden fixed inset-0 z-[60] bg-black/90 backdrop-blur-xl p-8">
+        <div class="max-w-md mx-auto">
+            <div class="flex justify-between items-center mb-10">
+                <h2 class="font-gaming text-xl text-blue-500">PROTOCOL SETTINGS</h2>
+                <button onclick="toggleSettings()" class="text-2xl">&times;</button>
+            </div>
+            <div class="space-y-6">
+                <div class="flex justify-between items-center p-4 bg-white/5 rounded-2xl border border-white/5">
+                    <span class="text-xs font-bold uppercase tracking-widest">Global Proxy Tunnel</span>
+                    <div class="w-10 h-5 bg-blue-600 rounded-full flex items-center px-1"><div class="w-3 h-3 bg-white rounded-full"></div></div>
+                </div>
+                <div class="flex justify-between items-center p-4 bg-white/5 rounded-2xl border border-white/5">
+                    <span class="text-xs font-bold uppercase tracking-widest">4K Stream Bypass</span>
+                    <div class="w-10 h-5 bg-green-600 rounded-full flex items-center justify-end px-1"><div class="w-3 h-3 bg-white rounded-full"></div></div>
+                </div>
+                <div class="flex justify-between items-center p-4 bg-white/5 rounded-2xl border border-white/5">
+                    <span class="text-xs font-bold uppercase tracking-widest">Multi-Engine Scan</span>
+                    <span class="text-[10px] text-blue-400 font-bold">V2.4 ACTIVE</span>
+                </div>
+            </div>
         </div>
+    </div>
 
-        <div class="ad-container glass p-2 mb-8 text-center border-dashed border-white/10">
-            <p class="text-[8px] uppercase mb-2 opacity-30">Sponsored Digital Stream</p>
+    <main class="container mx-auto px-4 py-16 max-w-4xl">
+        <header class="text-center mb-16">
+            <h1 class="font-gaming text-7xl md:text-9xl font-black italic tracking-tighter opacity-10 absolute left-1/2 -translate-x-1/2 -top-10 select-none">SHADOW</h1>
+            <h2 class="font-gaming text-5xl md:text-7xl font-black italic mb-4 relative z-10 gradient-text">AYANX PROTOCOL</h2>
+            <p class="text-gray-500 tracking-[0.5em] text-[10px] uppercase font-bold">Deep Media Extraction Interface</p>
+        </header>
+
+        <div class="cyber-card p-2 mb-10 text-center border-dashed border-white/10">
             <script type="text/javascript">
                 atOptions = { 'key' : '8a913a4471f654b8883fa848f37fea48', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
             </script>
             <script type="text/javascript" src="//www.highperformanceformat.com/8a913a4471f654b8883fa848f37fea48/invoke.js"></script>
         </div>
 
-        <div class="glass p-3 rounded-[2rem] flex flex-col md:flex-row gap-2 neon-border mb-4">
-            <input type="url" id="mediaUrl" placeholder="PASTE LINK HERE (YT, INSTA, FB, PHOTOS)..." 
-                   class="flex-1 bg-transparent px-8 py-5 outline-none font-bold text-lg">
-            <button id="extractBtn" class="bg-blue-600 hover:bg-blue-700 px-12 py-5 rounded-[1.5rem] font-gaming font-black tracking-widest transition-all shadow-glow">
-                EXTRACT
+        <div class="cyber-card p-3 rounded-[2.5rem] flex flex-col md:flex-row gap-3 mb-6 neon-glow">
+            <input type="url" id="mediaUrl" placeholder="PASTE ENCRYPTED LINK HERE..." 
+                   class="flex-1 bg-transparent px-8 py-5 outline-none font-bold text-lg text-white">
+            <button id="extractBtn" class="bg-blue-600 hover:bg-blue-700 px-12 py-5 rounded-[1.8rem] font-gaming font-black tracking-tighter text-xl transition-all active:scale-95">
+                ANALYZE
             </button>
         </div>
 
-        <div id="statusBox" class="hidden mb-12">
-            <div class="h-[2px] w-full bg-white/5 overflow-hidden rounded-full">
-                <div id="progressBar" class="h-full bg-blue-600 shadow-[0_0_15px_#2563eb] transition-all duration-500" style="width: 0%"></div>
+        <div id="statusContainer" class="hidden mb-12">
+            <div class="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                <div id="progressBar" class="h-full bg-blue-500 shadow-[0_0_20px_#3b82f6] transition-all duration-300"></div>
             </div>
-            <div class="flex justify-between mt-3 text-[9px] font-gaming uppercase tracking-widest text-blue-400">
-                <span id="statusMsg">Bypassing Encryption...</span>
+            <div class="flex justify-between mt-4 text-[9px] font-gaming text-blue-400 uppercase tracking-[0.3em]">
+                <span id="statusMsg">Handshaking with API...</span>
                 <span id="statusPercent">0%</span>
             </div>
         </div>
 
-        <div id="results" class="hidden grid grid-cols-1 md:grid-cols-2 gap-8 animate-fade-in"></div>
+        <div id="resultsArea" class="hidden space-y-8 animate-fade-in"></div>
 
-        <div class="my-12 glass p-4 rounded-3xl text-center border-white/5">
-            <p class="text-[8px] uppercase mb-4 opacity-20">Hardware Sponsored Access</p>
-            <div id="adsterra-native"></div>
-        </div>
-
-        <div class="flex justify-center gap-8 mb-20 opacity-30 text-2xl">
-            <i class="fab fa-youtube"></i><i class="fab fa-instagram"></i><i class="fab fa-facebook"></i><i class="fab fa-tiktok"></i>
-        </div>
-
-        <footer class="mt-40 pt-20 border-t border-white/5">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left mb-20">
+        <footer class="mt-40 border-t border-white/5 pt-20 pb-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-20 mb-20">
                 <div>
-                    <h4 class="font-gaming text-blue-500 text-xs mb-4">CORE ARCHITECTURE</h4>
-                    <p class="text-[10px] text-gray-500 leading-relaxed uppercase">Developed by <span class="text-white">AyanX</span>. Powered by Shadow Nexus Multi-Proxy engines. Optimized for Class 10+ Speed.</p>
+                    <h4 class="font-gaming text-blue-500 text-xs mb-6 tracking-widest uppercase">System Core</h4>
+                    <p class="text-[11px] text-gray-500 leading-relaxed uppercase">
+                        Architecture designed by <span class="text-white">AyanX</span>. 
+                        Integrated with <span class="text-blue-400">Shadow Nexus Army</span> proxy clusters. 
+                        Optimized for high-speed packet extraction.
+                    </p>
                 </div>
                 <div>
-                    <h4 class="font-gaming text-red-900 text-xs mb-4">LEGAL DISCLAIMER</h4>
-                    <p class="text-[10px] text-gray-600 leading-relaxed italic">AyanX Downloader is an educational gateway. We do not host copyrighted files. Use for personal backup only.</p>
-                </div>
-                <div>
-                    <h4 class="font-gaming text-blue-500 text-xs mb-4">SYSTEM STATUS</h4>
-                    <div class="flex items-center gap-2 justify-center md:justify-start">
-                        <div class="h-2 w-2 bg-green-500 rounded-full animate-pulse"></div>
-                        <span class="text-[10px] text-gray-400 font-bold">ALL SERVERS ONLINE</span>
-                    </div>
+                    <h4 class="font-gaming text-red-900 text-xs mb-6 tracking-widest uppercase">Legal Protocol</h4>
+                    <p class="text-[10px] text-gray-600 leading-relaxed italic">
+                        WARNING: Unauthorized downloading of copyrighted material is a violation of international laws. 
+                        AyanX Downloader is for personal educational recovery only. We do not store any data.
+                    </p>
                 </div>
             </div>
-            <p class="text-center font-gaming text-[10px] tracking-[0.6em] opacity-20">© 2026 AYANX PROTOCOL | SHADOW NEXUS ARMY</p>
+            <div class="text-center opacity-30">
+                <p class="font-gaming text-[10px] tracking-[0.8em]">© 2026 AYANX PROTOCOL | ALL RIGHTS RESERVED</p>
+            </div>
         </footer>
     </main>
 
     <script src="script.js"></script>
+    <script>
+        function toggleSettings() {
+            const panel = document.getElementById('settingsPanel');
+            panel.classList.toggle('hidden');
+        }
+    </script>
 </body>
 </html>
