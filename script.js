@@ -2,7 +2,7 @@ class VideoDownloader {
     constructor() {
         this.initializeElements();
         this.bindEvents();
-        console.log("🚀 Shadow Downloader UI Loaded...");
+        console.log("🚀 Shadow Downloader UI Connected to Cloud...");
     }
 
     initializeElements() {
@@ -29,7 +29,7 @@ class VideoDownloader {
         const url = this.urlInput.value.trim();
 
         if (!url) {
-            this.showError('Opps! Please enter a valid URL first.');
+            this.showError('Please enter a link first, Boss!');
             return;
         }
 
@@ -37,11 +37,11 @@ class VideoDownloader {
         this.showLoading();
 
         try {
-            const response = await fetch('http://localhost:3000/api/analyze', {
+            // ✅ Your Permanent Render Link
+            const response = await fetch('https://shadow-api-z7k0.onrender.com/api/analyze', {
                 method: 'POST',
                 headers: { 
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ url })
             });
@@ -51,10 +51,10 @@ class VideoDownloader {
             if (data.success) {
                 this.displayResults(data);
             } else {
-                this.showError(data.error || 'Server couldn\'t process this link.');
+                this.showError(data.error || 'Server found an issue with this link.');
             }
         } catch (error) {
-            this.showError('Connection Refused! Make sure your Backend server is running.');
+            this.showError('Server is waking up... Please wait 30 seconds and try again.');
             console.error("Fetch Error:", error);
         }
     }
@@ -65,18 +65,18 @@ class VideoDownloader {
         
         setTimeout(() => {
             this.results.scrollIntoView({ behavior: 'smooth' });
-        }, 200);
+        }, 300);
 
-        this.videoTitle.textContent = data.title || 'Unknown Video';
-        this.thumbnail.src = data.thumbnail || 'https://via.placeholder.com/600x400?text=Shadow+Downloader';
-        this.platform.textContent = data.platform || 'Platform';
+        this.videoTitle.textContent = data.title || 'Untitled Video';
+        this.thumbnail.src = data.thumbnail || 'https://via.placeholder.com/600x400?text=Video+Found';
+        this.platform.textContent = data.platform || 'Social Media';
         
         if (data.duration) {
             const mins = Math.floor(data.duration / 60);
             const secs = (data.duration % 60).toString().padStart(2, '0');
             this.duration.textContent = `${mins}:${secs}`;
         } else {
-            this.duration.textContent = '00:00';
+            this.duration.textContent = 'Live/HD';
         }
 
         this.downloadList.innerHTML = '';
@@ -87,29 +87,27 @@ class VideoDownloader {
                 this.downloadList.appendChild(button);
             });
         } else {
-            this.downloadList.innerHTML = '<p class="text-white text-center">No download links available for this quality.</p>';
+            this.downloadList.innerHTML = '<p class="text-white text-center">No links found for this video.</p>';
         }
-
-        this.results.classList.add('fade-in-up');
     }
 
     createDownloadButton(download) {
         const div = document.createElement('div');
-        div.className = 'group bg-white/5 backdrop-blur-xl rounded-3xl p-6 border border-white/10 hover:border-white/20 hover:bg-white/10 transition-all duration-300 hover:scale-[1.02] fade-in-up';
+        div.className = 'group bg-white/5 backdrop-blur-xl rounded-3xl p-6 border border-white/10 hover:border-white/20 transition-all duration-300';
 
         div.innerHTML = `
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3">
-                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center text-white">
-                        <i class="fas fa-play text-xl"></i>
+                    <div class="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center">
+                        <i class="fas fa-download"></i>
                     </div>
                     <div>
-                        <p class="text-white font-bold">${download.quality || '720p HD'}</p>
-                        <p class="text-gray-400 text-sm">${download.size || 'Direct Link'}</p>
+                        <p class="text-white font-bold">${download.quality || 'HD'}</p>
+                        <p class="text-gray-400 text-sm">${download.size || 'Direct'}</p>
                     </div>
                 </div>
-                <a href="${download.url}" target="_blank" download rel="noopener noreferrer" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-xl font-bold transition-all shadow-lg shadow-blue-500/20">
-                    Download Now
+                <a href="${download.url}" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-xl font-bold transition-all">
+                    Download
                 </a>
             </div>`;
         return div;
@@ -117,18 +115,8 @@ class VideoDownloader {
 
     showLoading() { this.loading.classList.remove('hidden'); }
     hideLoading() { this.loading.classList.add('hidden'); }
-    
-    resetUI() {
-        this.results.classList.add('hidden');
-        this.error.classList.add('hidden');
-    }
-
-    showError(msg) {
-        this.hideLoading();
-        this.error.classList.remove('hidden');
-        document.getElementById('errorMessage').textContent = msg;
-        document.getElementById('errorTitle').textContent = "Server Error";
-    }
+    resetUI() { this.results.classList.add('hidden'); this.error.classList.add('hidden'); }
+    showError(msg) { this.hideLoading(); this.error.classList.remove('hidden'); document.getElementById('errorMessage').textContent = msg; }
 }
 
 new VideoDownloader();
