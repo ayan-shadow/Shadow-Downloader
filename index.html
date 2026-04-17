@@ -5,61 +5,93 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-site-verification" content="NgnUCfNFkaWbmSnfBcTLw8Cus_POEGJyJrSyiaaUaHU" />
     
-    <title>AyanX Downloader | Free 4K Video & Photo Grabber</title>
-    
+    <title>AyanX | Universal Media Protocol & Downloader</title>
+
     <script type='text/javascript' src='//pl26073702.highcpmgate.com/8a/91/3a/8a913a4471f654b8883fa848f37fea48.js'></script>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
 
     <style>
-        body { font-family: 'Inter', sans-serif; background: #050505; color: white; }
+        :root { --neon: #3b82f6; --accent: #9333ea; }
+        body { font-family: 'Rajdhani', sans-serif; background: #000; color: #fff; overflow-x: hidden; }
         .font-gaming { font-family: 'Orbitron', sans-serif; }
-        .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .gradient-text { background: linear-gradient(90deg, #3b82f6, #9333ea); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .neon-border { border: 1px solid rgba(59, 130, 246, 0.3); }
-        .progress-fill { width: 0%; height: 100%; background: #3b82f6; transition: 0.3s; box-shadow: 0 0 10px #3b82f6; }
+        .cyber-card { background: rgba(10, 10, 10, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .neon-text { text-shadow: 0 0 15px var(--neon); }
+        .gradient-bg { background: linear-gradient(90deg, var(--neon), var(--accent)); }
+        .progress-bar { width: 0%; height: 2px; background: var(--neon); box-shadow: 0 0 10px var(--neon); transition: 0.4s; }
+        input:focus { border-color: var(--neon) !important; box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
     </style>
 </head>
-<body class="min-h-screen p-4">
+<body class="min-h-screen">
 
-    <div class="max-w-4xl mx-auto pt-12 text-center">
-        <header class="mb-12">
-            <h1 class="font-gaming text-7xl md:text-9xl font-black mb-2 tracking-tighter italic">
-                <span class="gradient-text">AYANX</span>
-            </h1>
-            <p class="text-gray-500 tracking-[0.4em] text-[10px] uppercase font-gaming">Universal Media Protocol</p>
+    <nav class="p-6 border-b border-white/5 flex justify-between items-center cyber-card sticky top-0 z-50">
+        <div class="font-gaming font-black text-2xl tracking-tighter">AYANX<span class="text-blue-500">.</span></div>
+        <div class="flex gap-6 text-sm uppercase tracking-widest opacity-60 font-bold">
+            <button onclick="alert('Settings: Proxy Engine Active')"><i class="fas fa-cog"></i> Settings</button>
+            <button><i class="fas fa-shield-alt"></i> Secure</button>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 py-16 max-w-5xl">
+        <header class="text-center mb-16">
+            <h1 class="font-gaming text-6xl md:text-8xl font-black mb-4 italic neon-text">UNIVERSAL <span class="text-blue-500">PROTOCOL</span></h1>
+            <p class="text-gray-500 tracking-[0.6em] text-[10px] uppercase font-bold">Encrypted Multi-Platform Media Extractor</p>
         </header>
 
-        <div class="glass p-3 rounded-[2rem] mb-8 neon-border flex flex-col md:flex-row gap-2">
-            <input type="url" id="videoUrl" placeholder="Paste Video/Photo Link (YT, FB, Insta)..." class="flex-1 bg-transparent px-6 py-4 outline-none text-white text-lg">
-            <button id="analyzeBtn" class="bg-blue-600 hover:bg-blue-700 px-10 py-4 rounded-xl font-bold font-gaming transition-all">ANALYZE</button>
+        <div class="mb-10 cyber-card p-2 rounded-xl text-center">
+            <script type="text/javascript">
+                atOptions = { 'key' : '8a913a4471f654b8883fa848f37fea48', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/8a913a4471f654b8883fa848f37fea48/invoke.js"></script>
         </div>
 
-        <div id="loader" class="hidden mb-8 px-10">
-            <div class="h-1 w-full bg-white/5 rounded-full overflow-hidden">
-                <div id="progressBar" class="progress-fill"></div>
+        <section class="cyber-card p-2 rounded-[2.5rem] mb-4 border-white/10 flex flex-col md:flex-row gap-2">
+            <input type="url" id="mediaUrl" placeholder="PASTE DIGITAL LINK (YT, INSTA, FB, PHOTO)..." 
+                   class="flex-1 bg-transparent px-8 py-5 outline-none text-white text-lg font-bold placeholder:opacity-20">
+            <button id="extractBtn" class="gradient-bg px-12 py-5 rounded-[2rem] font-gaming font-black tracking-widest hover:scale-105 transition-transform active:scale-95">EXTRACT</button>
+        </section>
+
+        <div id="statusContainer" class="hidden px-10 mb-12">
+            <div class="w-full bg-white/5 h-[1px] rounded-full overflow-hidden">
+                <div id="progressBar" class="progress-bar"></div>
             </div>
-            <p class="text-[8px] font-gaming text-blue-500 mt-2 uppercase tracking-widest animate-pulse">Bypassing Encryption...</p>
-        </div>
-
-        <div class="glass rounded-3xl p-4 mb-10 border-dashed border-white/5">
-            <div id="ad-slot" class="min-h-[90px] flex items-center justify-center">
-                <script type="text/javascript">
-                    atOptions = { 'key' : '8a913a4471f654b8883fa848f37fea48', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
-                </script>
-                <script type="text/javascript" src="//www.highperformanceformat.com/8a913a4471f654b8883fa848f37fea48/invoke.js"></script>
+            <div class="flex justify-between mt-2 text-[8px] font-gaming text-blue-400 uppercase tracking-widest">
+                <span id="statusText">Initiating Proxy Handshake...</span>
+                <span id="percentText">0%</span>
             </div>
         </div>
 
-        <div id="results" class="hidden"></div>
-        <div id="error" class="hidden glass p-8 rounded-3xl border-red-500/20 text-red-400 font-gaming text-sm uppercase"></div>
+        <div id="outputArea" class="hidden grid grid-cols-1 md:grid-cols-2 gap-8 animate-in fade-in duration-700"></div>
 
-        <footer class="mt-24 pb-10 opacity-40">
-            <p class="font-gaming text-[9px] tracking-[0.3em]">ARCHITECTURE BY <span class="text-blue-500">AYANX PROTOCOL</span></p>
+        <footer class="mt-40 pt-20 border-t border-white/5">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left mb-20">
+                <div>
+                    <h4 class="font-gaming text-blue-500 text-sm mb-4">ARCHITECTURE</h4>
+                    <p class="text-xs text-gray-500 leading-relaxed uppercase tracking-tighter">Developed by AyanX. Engineered for maximum speed using multi-threaded proxy protocols.</p>
+                </div>
+                <div>
+                    <h4 class="font-gaming text-red-700 text-sm mb-4">SYSTEM WARNING</h4>
+                    <p class="text-[10px] text-gray-600 leading-relaxed italic">Illegal redistribution of copyrighted content is strictly prohibited. Use this tool for personal educational backup only.</p>
+                </div>
+                <div>
+                    <h4 class="font-gaming text-blue-500 text-sm mb-4">NETWORK STATUS</h4>
+                    <div class="flex items-center gap-2 justify-center md:justify-start">
+                        <div class="h-2 w-2 bg-green-500 rounded-full animate-pulse"></div>
+                        <span class="text-[10px] text-gray-400 font-bold uppercase">Proxy Servers: ONLINE</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center opacity-20 hover:opacity-100 transition-opacity">
+                <p class="font-gaming text-[10px] tracking-[0.5em] mb-4">© 2026 AYANX NEXUS PROTOCOL | SHADOW NEXUS ARMY</p>
+                <div class="flex justify-center gap-6 grayscale">
+                    <i class="fab fa-youtube"></i><i class="fab fa-instagram"></i><i class="fab fa-facebook"></i>
+                </div>
+            </div>
         </footer>
-    </div>
+    </main>
 
     <script src="script.js"></script>
 </body>

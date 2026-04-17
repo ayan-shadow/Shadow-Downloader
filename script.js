@@ -1,38 +1,38 @@
-const analyzeBtn = document.getElementById('analyzeBtn');
-const loader = document.getElementById('loader');
+const extractBtn = document.getElementById('extractBtn');
 const progressBar = document.getElementById('progressBar');
-const results = document.getElementById('results');
-const error = document.getElementById('error');
-const videoUrl = document.getElementById('videoUrl');
+const statusContainer = document.getElementById('statusContainer');
+const outputArea = document.getElementById('outputArea');
+const statusText = document.getElementById('statusText');
+const percentText = document.getElementById('percentText');
 
-// ✅ AAPKI RAPIDAPI KEY INTEGRATED
-const RAPID_KEY = "1ab09c6cccmsh3b437c4d2ebc0f0p1d517ejsn76f2c44d23d7";
+// CONFIGURATION
+const RAPID_KEY = "1ab09c6cccmsh3b437c4d2ebc0f0p1d517ejsn76f2c44d23d7"; // Aapki Key
 const RAPID_HOST = "youtube-video-fast-downloader-24-7.p.rapidapi.com";
-const COBALT_API = "https://api.cobalt.tools/api/json";
+const COBALT_PROXY = "https://api.cobalt.tools/api/json";
 
-analyzeBtn.addEventListener('click', async () => {
-    const url = videoUrl.value.trim();
+extractBtn.addEventListener('click', async () => {
+    const url = document.getElementById('mediaUrl').value.trim();
     if (!url) return;
 
-    results.classList.add('hidden');
-    error.classList.add('hidden');
-    loader.classList.remove('hidden');
-    
-    let p = 0;
-    const interval = setInterval(() => { p += 5; progressBar.style.width = p + "%"; if (p >= 90) clearInterval(interval); }, 100);
+    // Reset UI
+    outputArea.classList.add('hidden');
+    statusContainer.classList.remove('hidden');
+    updateProgress(10, "Establishing Connection...");
 
     try {
-        // Step 1: Try RapidAPI
+        // --- PHASE 1: RAPID PROXY ATTEMPT ---
+        updateProgress(30, "Bypassing Platform Security...");
         let response = await fetch(`https://${RAPID_HOST}/get-video-info?url=${encodeURIComponent(url)}`, {
             headers: { 'x-rapidapi-key': RAPID_KEY, 'x-rapidapi-host': RAPID_HOST }
         });
         let data = await response.json();
 
         if (data && data.status === "ok") {
-            displayResults(data.title, data.thumb, data.url);
+            renderResults(data.title, data.thumb, data.url);
         } else {
-            // Step 2: Fallback to Cobalt Engine
-            let cobaltRes = await fetch(COBALT_API, {
+            // --- PHASE 2: FALLBACK TO COBALT SYSTEM (VidMate Style) ---
+            updateProgress(60, "Redirecting via Secondary Proxy...");
+            let cobaltRes = await fetch(COBALT_PROXY, {
                 method: "POST",
                 headers: { "Accept": "application/json", "Content-Type": "application/json" },
                 body: JSON.stringify({ url: url, vQuality: "720" })
@@ -40,34 +40,46 @@ analyzeBtn.addEventListener('click', async () => {
             let cobaltData = await cobaltRes.json();
 
             if (cobaltData.url || cobaltData.status === "stream") {
-                displayResults("Media Stream Detected", cobaltData.url, [{url: cobaltData.url, quality: "Download Now", ext: "Media"}]);
+                renderResults("Digital Stream Extracted", cobaltData.url, [{url: cobaltData.url, quality: "High Definition", ext: "media"}]);
             } else {
-                throw new Error("Both engines failed. Target is highly protected.");
+                throw new Error("Protocol Blocked by Host. Try again later.");
             }
         }
     } catch (err) {
-        clearInterval(interval);
-        loader.classList.add('hidden');
-        error.classList.remove('hidden');
-        error.innerText = "System Error: " + err.message;
-    }
-
-    function displayResults(title, thumb, links) {
-        clearInterval(interval);
-        progressBar.style.width = "100%";
-        setTimeout(() => {
-            loader.classList.add('hidden');
-            results.classList.remove('hidden');
-            let btnHtml = Array.isArray(links) 
-                ? links.map(l => `<a href="${l.url}" target="_blank" class="bg-blue-600 p-4 rounded-xl font-bold uppercase text-[10px] tracking-widest block mb-2 hover:bg-blue-700 transition-all">Download ${l.quality || 'HD'} (${l.ext || 'File'})</a>`).join('')
-                : `<a href="${links}" target="_blank" class="bg-blue-600 p-4 rounded-xl font-bold uppercase text-[10px] tracking-widest block hover:bg-blue-700 transition-all">Download Media</a>`;
-
-            results.innerHTML = `
-                <div class="glass p-8 rounded-[2rem] border-blue-500/10 text-center animate-in fade-in">
-                    ${thumb ? `<img src="${thumb}" class="w-full max-w-sm mx-auto rounded-2xl mb-6 shadow-2xl">` : ''}
-                    <h2 class="text-lg font-bold mb-6 font-gaming uppercase tracking-tighter">${title}</h2>
-                    <div class="space-y-2">${btnHtml}</div>
-                </div>`;
-        }, 500);
+        updateProgress(0, "Error: " + err.message);
+        alert("CRITICAL ERROR: " + err.message);
     }
 });
+
+function updateProgress(p, text) {
+    progressBar.style.width = p + "%";
+    statusText.innerText = text;
+    percentText.innerText = p + "%";
+}
+
+function renderResults(title, thumb, links) {
+    updateProgress(100, "Decryption Complete.");
+    setTimeout(() => {
+        statusContainer.classList.add('hidden');
+        outputArea.classList.remove('hidden');
+        
+        let downloadLinks = Array.isArray(links) 
+            ? links.map(l => `
+                <a href="${l.url}" target="_blank" class="bg-blue-600/10 border border-blue-500/20 p-4 rounded-2xl flex justify-between items-center hover:bg-blue-600 transition-all font-bold">
+                    <span class="text-[10px] tracking-widest">${l.quality} ${l.ext.toUpperCase()}</span>
+                    <i class="fas fa-download"></i>
+                </a>`).join('')
+            : `<a href="${links}" target="_blank" class="bg-blue-600 p-4 rounded-2xl text-center font-bold uppercase tracking-widest">Download Full Media</a>`;
+
+        outputArea.innerHTML = `
+            <div class="cyber-card p-6 rounded-[2.5rem] border-blue-500/20">
+                <img src="${thumb || 'https://via.placeholder.com/400x225/000000/FFFFFF?text=AyanX+Secure+Stream'}" class="w-full rounded-2xl mb-4 shadow-2xl">
+                <h3 class="font-gaming text-sm uppercase tracking-tight mb-4">${title}</h3>
+            </div>
+            <div class="flex flex-col gap-3 justify-center">
+                <div class="text-[8px] font-gaming text-gray-600 mb-2 tracking-[0.4em] uppercase text-center">Available Extracted Layers</div>
+                ${downloadLinks}
+            </div>
+        `;
+    }, 800);
+}
