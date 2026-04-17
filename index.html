@@ -4,92 +4,86 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-site-verification" content="NgnUCfNFkaWbmSnfBcTLw8Cus_POEGJyJrSyiaaUaHU" />
-    
-    <title>AyanX | Universal Media Protocol & Downloader</title>
+    <title>AyanX | Universal Media Protocol</title>
 
     <script type='text/javascript' src='//pl26073702.highcpmgate.com/8a/91/3a/8a913a4471f654b8883fa848f37fea48.js'></script>
-
+    
+    <link rel="stylesheet" href="style.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
-
-    <style>
-        :root { --neon: #3b82f6; --accent: #9333ea; }
-        body { font-family: 'Rajdhani', sans-serif; background: #000; color: #fff; overflow-x: hidden; }
-        .font-gaming { font-family: 'Orbitron', sans-serif; }
-        .cyber-card { background: rgba(10, 10, 10, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .neon-text { text-shadow: 0 0 15px var(--neon); }
-        .gradient-bg { background: linear-gradient(90deg, var(--neon), var(--accent)); }
-        .progress-bar { width: 0%; height: 2px; background: var(--neon); box-shadow: 0 0 10px var(--neon); transition: 0.4s; }
-        input:focus { border-color: var(--neon) !important; box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
-    </style>
 </head>
-<body class="min-h-screen">
+<body class="bg-black text-white">
 
-    <nav class="p-6 border-b border-white/5 flex justify-between items-center cyber-card sticky top-0 z-50">
-        <div class="font-gaming font-black text-2xl tracking-tighter">AYANX<span class="text-blue-500">.</span></div>
-        <div class="flex gap-6 text-sm uppercase tracking-widest opacity-60 font-bold">
-            <button onclick="alert('Settings: Proxy Engine Active')"><i class="fas fa-cog"></i> Settings</button>
-            <button><i class="fas fa-shield-alt"></i> Secure</button>
+    <nav class="cyber-nav p-6 flex justify-between items-center sticky top-0 z-50">
+        <div class="logo font-gaming text-2xl font-black italic">AYANX<span class="text-blue-600">.</span></div>
+        <div class="settings flex gap-4 opacity-50 text-xs">
+            <span><i class="fas fa-server"></i> PROXY: ON</span>
+            <span><i class="fas fa-bolt"></i> TURBO: ACTIVE</span>
         </div>
     </nav>
 
-    <main class="container mx-auto px-4 py-16 max-w-5xl">
-        <header class="text-center mb-16">
-            <h1 class="font-gaming text-6xl md:text-8xl font-black mb-4 italic neon-text">UNIVERSAL <span class="text-blue-500">PROTOCOL</span></h1>
-            <p class="text-gray-500 tracking-[0.6em] text-[10px] uppercase font-bold">Encrypted Multi-Platform Media Extractor</p>
-        </header>
+    <main class="container mx-auto px-4 py-12 max-w-4xl">
+        <div class="text-center mb-12">
+            <h1 class="font-gaming text-6xl md:text-8xl font-black gradient-text italic mb-2">AYANX</h1>
+            <p class="tracking-[0.5em] text-[9px] uppercase font-bold text-blue-500">Global Media Extraction Protocol</p>
+        </div>
 
-        <div class="mb-10 cyber-card p-2 rounded-xl text-center">
+        <div class="ad-container glass p-2 mb-8 text-center border-dashed border-white/10">
+            <p class="text-[8px] uppercase mb-2 opacity-30">Sponsored Digital Stream</p>
             <script type="text/javascript">
                 atOptions = { 'key' : '8a913a4471f654b8883fa848f37fea48', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
             </script>
             <script type="text/javascript" src="//www.highperformanceformat.com/8a913a4471f654b8883fa848f37fea48/invoke.js"></script>
         </div>
 
-        <section class="cyber-card p-2 rounded-[2.5rem] mb-4 border-white/10 flex flex-col md:flex-row gap-2">
-            <input type="url" id="mediaUrl" placeholder="PASTE DIGITAL LINK (YT, INSTA, FB, PHOTO)..." 
-                   class="flex-1 bg-transparent px-8 py-5 outline-none text-white text-lg font-bold placeholder:opacity-20">
-            <button id="extractBtn" class="gradient-bg px-12 py-5 rounded-[2rem] font-gaming font-black tracking-widest hover:scale-105 transition-transform active:scale-95">EXTRACT</button>
-        </section>
+        <div class="glass p-3 rounded-[2rem] flex flex-col md:flex-row gap-2 neon-border mb-4">
+            <input type="url" id="mediaUrl" placeholder="PASTE LINK HERE (YT, INSTA, FB, PHOTOS)..." 
+                   class="flex-1 bg-transparent px-8 py-5 outline-none font-bold text-lg">
+            <button id="extractBtn" class="bg-blue-600 hover:bg-blue-700 px-12 py-5 rounded-[1.5rem] font-gaming font-black tracking-widest transition-all shadow-glow">
+                EXTRACT
+            </button>
+        </div>
 
-        <div id="statusContainer" class="hidden px-10 mb-12">
-            <div class="w-full bg-white/5 h-[1px] rounded-full overflow-hidden">
-                <div id="progressBar" class="progress-bar"></div>
+        <div id="statusBox" class="hidden mb-12">
+            <div class="h-[2px] w-full bg-white/5 overflow-hidden rounded-full">
+                <div id="progressBar" class="h-full bg-blue-600 shadow-[0_0_15px_#2563eb] transition-all duration-500" style="width: 0%"></div>
             </div>
-            <div class="flex justify-between mt-2 text-[8px] font-gaming text-blue-400 uppercase tracking-widest">
-                <span id="statusText">Initiating Proxy Handshake...</span>
-                <span id="percentText">0%</span>
+            <div class="flex justify-between mt-3 text-[9px] font-gaming uppercase tracking-widest text-blue-400">
+                <span id="statusMsg">Bypassing Encryption...</span>
+                <span id="statusPercent">0%</span>
             </div>
         </div>
 
-        <div id="outputArea" class="hidden grid grid-cols-1 md:grid-cols-2 gap-8 animate-in fade-in duration-700"></div>
+        <div id="results" class="hidden grid grid-cols-1 md:grid-cols-2 gap-8 animate-fade-in"></div>
+
+        <div class="my-12 glass p-4 rounded-3xl text-center border-white/5">
+            <p class="text-[8px] uppercase mb-4 opacity-20">Hardware Sponsored Access</p>
+            <div id="adsterra-native"></div>
+        </div>
+
+        <div class="flex justify-center gap-8 mb-20 opacity-30 text-2xl">
+            <i class="fab fa-youtube"></i><i class="fab fa-instagram"></i><i class="fab fa-facebook"></i><i class="fab fa-tiktok"></i>
+        </div>
 
         <footer class="mt-40 pt-20 border-t border-white/5">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left mb-20">
                 <div>
-                    <h4 class="font-gaming text-blue-500 text-sm mb-4">ARCHITECTURE</h4>
-                    <p class="text-xs text-gray-500 leading-relaxed uppercase tracking-tighter">Developed by AyanX. Engineered for maximum speed using multi-threaded proxy protocols.</p>
+                    <h4 class="font-gaming text-blue-500 text-xs mb-4">CORE ARCHITECTURE</h4>
+                    <p class="text-[10px] text-gray-500 leading-relaxed uppercase">Developed by <span class="text-white">AyanX</span>. Powered by Shadow Nexus Multi-Proxy engines. Optimized for Class 10+ Speed.</p>
                 </div>
                 <div>
-                    <h4 class="font-gaming text-red-700 text-sm mb-4">SYSTEM WARNING</h4>
-                    <p class="text-[10px] text-gray-600 leading-relaxed italic">Illegal redistribution of copyrighted content is strictly prohibited. Use this tool for personal educational backup only.</p>
+                    <h4 class="font-gaming text-red-900 text-xs mb-4">LEGAL DISCLAIMER</h4>
+                    <p class="text-[10px] text-gray-600 leading-relaxed italic">AyanX Downloader is an educational gateway. We do not host copyrighted files. Use for personal backup only.</p>
                 </div>
                 <div>
-                    <h4 class="font-gaming text-blue-500 text-sm mb-4">NETWORK STATUS</h4>
+                    <h4 class="font-gaming text-blue-500 text-xs mb-4">SYSTEM STATUS</h4>
                     <div class="flex items-center gap-2 justify-center md:justify-start">
                         <div class="h-2 w-2 bg-green-500 rounded-full animate-pulse"></div>
-                        <span class="text-[10px] text-gray-400 font-bold uppercase">Proxy Servers: ONLINE</span>
+                        <span class="text-[10px] text-gray-400 font-bold">ALL SERVERS ONLINE</span>
                     </div>
                 </div>
             </div>
-            
-            <div class="text-center opacity-20 hover:opacity-100 transition-opacity">
-                <p class="font-gaming text-[10px] tracking-[0.5em] mb-4">© 2026 AYANX NEXUS PROTOCOL | SHADOW NEXUS ARMY</p>
-                <div class="flex justify-center gap-6 grayscale">
-                    <i class="fab fa-youtube"></i><i class="fab fa-instagram"></i><i class="fab fa-facebook"></i>
-                </div>
-            </div>
+            <p class="text-center font-gaming text-[10px] tracking-[0.6em] opacity-20">© 2026 AYANX PROTOCOL | SHADOW NEXUS ARMY</p>
         </footer>
     </main>
 
