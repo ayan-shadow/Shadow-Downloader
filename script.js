@@ -1,57 +1,51 @@
-async function analyzeVideo() {
-    const url = document.getElementById('videoUrl').value.trim();
+const analyzeBtn = document.getElementById('analyzeBtn');
+const videoUrl = document.getElementById('videoUrl');
+const loading = document.getElementById('loading');
+const results = document.getElementById('results');
+const error = document.getElementById('error');
+const errorMessage = document.getElementById('errorMessage');
+
+// API URL (Aapne jo Render par banayi hai)
+const API_BASE = "https://shadow-api-8f1u.onrender.com/api/download?url=";
+
+analyzeBtn.addEventListener('click', async () => {
+    const url = videoUrl.value.trim();
     if (!url) return;
 
     // Reset UI
-    document.getElementById('loading').classList.remove('hidden');
-    document.getElementById('results').classList.add('hidden');
-    document.getElementById('error').classList.add('hidden');
+    results.classList.add('hidden');
+    error.classList.add('hidden');
+    loading.classList.remove('hidden');
 
     try {
-        const response = await fetch('https://shadow-api-z7k0.onrender.com/api/analyze', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ url })
-        });
-
+        const response = await fetch(`${API_BASE}${encodeURIComponent(url)}`);
         const data = await response.json();
 
         if (data.success) {
-            document.getElementById('loading').classList.add('hidden');
-            document.getElementById('results').classList.remove('hidden');
+            loading.classList.add('hidden');
+            results.classList.remove('hidden');
             
-            document.getElementById('videoTitle').textContent = data.title;
-            document.getElementById('thumbnail').src = data.thumbnail;
-            document.getElementById('platform').textContent = data.platform;
-            document.getElementById('duration').textContent = data.duration + 's';
+            // Set Video Info
+            document.getElementById('thumbnail').src = data.info.thumbnail;
+            document.getElementById('videoTitle').innerText = data.info.title;
+            document.getElementById('platform').innerText = data.info.source;
+            document.getElementById('duration').innerText = data.info.duration || "HD";
 
-            const list = document.getElementById('downloadList');
-            list.innerHTML = '';
-            
-            data.downloads.forEach(dl => {
-                const btn = document.createElement('div');
-                btn.className = "glass p-4 rounded-2xl flex justify-between items-center border-white/5 hover:border-blue-500/30 transition-all";
-                btn.innerHTML = `
-                    <span class="font-gaming text-[10px] tracking-widest">${dl.quality}</span>
-                    <a href="${dl.url}" target="_blank" onclick="showWarning()" class="bg-blue-600 text-[10px] font-bold px-4 py-2 rounded-lg">DOWNLOAD</a>
-                `;
-                list.appendChild(btn);
-            });
+            // Generate Download Buttons
+            const downloadList = document.getElementById('downloadList');
+            downloadList.innerHTML = data.links.map(link => `
+                <a href="${link.url}" target="_blank" rel="nofollow" 
+                   class="glass p-4 rounded-xl border-blue-500/20 flex justify-between items-center hover:bg-blue-600/10 transition-all">
+                    <span class="font-bold text-sm">${link.quality} (${link.format})</span>
+                    <i class="fas fa-download text-blue-500"></i>
+                </a>
+            `).join('');
         } else {
-            throw new Error(data.error);
+            throw new Error(data.message || "Bhai, link scan nahi ho raha.");
         }
     } catch (err) {
-        document.getElementById('loading').classList.add('hidden');
-        document.getElementById('error').classList.remove('hidden');
-        document.getElementById('errorMessage').textContent = err.message;
+        loading.classList.add('hidden');
+        error.classList.remove('hidden');
+        errorMessage.innerText = err.message;
     }
-}
-
-function showWarning() {
-    // Randomly show warning to make it look pro
-    if(Math.random() > 0.5) {
-        document.getElementById('warningPopup').classList.remove('hidden');
-    }
-}
-
-document.getElementById('analyzeBtn').addEventListener('click', analyzeVideo);
+});
