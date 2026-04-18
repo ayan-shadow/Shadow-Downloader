@@ -11,19 +11,18 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Space+Grotesk:wght@400;700&display=swap');
         
-        /* 🎨 THEME SYSTEM */
         :root { --primary: #3b82f6; --bg: #000; --text: #fff; --glass: rgba(255,255,255,0.05); }
         body.theme-white { --bg: #f8fafc; --text: #0f172a; --glass: rgba(0,0,0,0.05); }
         body.theme-grey { --bg: #334155; --text: #f8fafc; --glass: rgba(255,255,255,0.1); }
         body.theme-red { --primary: #ef4444; }
 
-        body { font-family: 'Space Grotesk', sans-serif; background: var(--bg); color: --text; transition: 0.4s ease; }
+        body { font-family: 'Space Grotesk', sans-serif; background: var(--bg); color: var(--text); transition: 0.4s ease; overflow-x: hidden; }
         .font-gaming { font-family: 'Orbitron', sans-serif; }
         .glass { background: var(--glass); border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(20px); }
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: slideUp 0.4s ease-out; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        #popup { position: fixed; bottom: 20px; right: 20px; z-index: 1000; display: none; }
+        #popup { position: fixed; bottom: 20px; right: 20px; z-index: 1000; display: none; transition: 0.3s; }
     </style>
 </head>
 <body class="text-white">
@@ -34,7 +33,7 @@
 
     <nav class="p-5 border-b border-white/10 glass sticky top-0 z-50 flex justify-between items-center">
         <div class="font-gaming text-2xl text-blue-500 italic">AYANX<span class="text-blue-200">PRO</span></div>
-        <div class="flex gap-6 items-center">
+        <div class="flex gap-4 md:gap-6 items-center">
             <button onclick="switchTab('downloader')" class="text-[10px] font-bold uppercase tracking-tighter hover:text-blue-400 transition" id="btn-downloader">Downloader</button>
             <button onclick="switchTab('v2l')" class="text-[10px] font-bold uppercase tracking-tighter opacity-40 hover:opacity-100" id="btn-v2l">V2Link</button>
             <button onclick="switchTab('pdf')" class="text-[10px] font-bold uppercase tracking-tighter opacity-40 hover:opacity-100" id="btn-pdf">PDF Lab</button>
@@ -63,7 +62,7 @@
                 <p class="text-[10px] font-bold opacity-30 tracking-[0.5em] mt-4 uppercase">Advanced Media Decryption</p>
             </div>
             <div class="glass p-3 rounded-[3rem] flex flex-col md:flex-row gap-3 mb-20 shadow-2xl">
-                <input type="url" id="mediaUrl" placeholder="Paste URL here (Insta, YT, FB...)" class="flex-1 bg-transparent px-8 py-5 outline-none font-bold text-lg text-white">
+                <input type="url" id="mediaUrl" placeholder="Paste URL here (Insta, YT, FB...)" class="flex-1 bg-transparent px-8 py-5 outline-none font-bold text-lg text-white placeholder:opacity-30">
                 <button onclick="fetchMedia()" class="bg-blue-600 hover:bg-white hover:text-black transition-all px-12 py-5 rounded-[2.5rem] font-gaming font-black text-sm uppercase">Initialize</button>
             </div>
             <div id="loader" class="hidden text-center py-20"><div class="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div></div>
@@ -78,7 +77,7 @@
                 <i class="fas fa-link text-6xl text-blue-500 mb-8"></i>
                 <h2 class="text-3xl font-black italic mb-6 uppercase font-gaming">V2Link Tool</h2>
                 <input type="file" id="v2lFile" class="hidden" accept="video/*">
-                <label for="v2lFile" class="bg-blue-600 px-16 py-5 rounded-full font-bold cursor-pointer inline-block">Upload Video</label>
+                <label for="v2lFile" class="bg-blue-600 px-16 py-5 rounded-full font-bold cursor-pointer inline-block hover:scale-105 transition">Upload Video</label>
                 <div id="v2lOutput" class="mt-10"></div>
             </div>
         </section>
@@ -88,7 +87,7 @@
                 <i class="fas fa-file-pdf text-6xl text-red-500 mb-8"></i>
                 <h2 class="text-3xl font-black italic mb-6 uppercase font-gaming">PDF LAB</h2>
                 <input type="file" id="pdfFiles" class="hidden" multiple accept="image/*">
-                <label for="pdfFiles" class="bg-red-600 px-16 py-5 rounded-full font-bold cursor-pointer inline-block">Select Images</label>
+                <label for="pdfFiles" class="bg-red-600 px-16 py-5 rounded-full font-bold cursor-pointer inline-block hover:scale-105 transition">Select Images</label>
                 <button onclick="generatePDF()" class="block mx-auto mt-10 text-[10px] font-bold text-blue-400 uppercase tracking-widest underline italic">Convert to PDF</button>
             </div>
         </section>
@@ -106,7 +105,8 @@
     </main>
 
     <script>
-        const API = "https://shadow-api-final.onrender.com/";
+        // CORE CONFIGURATION - CONNECTED TO RENDER CLOUD
+        const API = "https://shadow-api-final.onrender.com";
 
         // 1. SYSTEM UTILS
         function notify(msg) {
@@ -131,41 +131,56 @@
             notify("Switching to " + t.toUpperCase());
         }
 
-        // 2. DOWNLOADER ENGINE
+        // 2. DOWNLOADER ENGINE (FLASK INTEGRATION)
         async function fetchMedia() {
-            const url = document.getElementById('mediaUrl').value;
+            const urlInput = document.getElementById('mediaUrl');
+            const url = urlInput.value.trim();
             if(!url) return notify("Input Required!");
+            
             document.getElementById('loader').classList.remove('hidden');
             document.getElementById('resultArea').classList.add('hidden');
+            
             try {
                 const res = await fetch(`${API}/smart_fetch`, {
-                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    method: 'POST', 
+                    headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({url})
                 });
+                
+                if (!res.ok) throw new Error('Network error');
+                
                 const data = await res.json();
-                if(data.status === "success") renderUI(data);
-                else notify("Bypass Failed!");
-            } catch(e) { notify("Backend Offline!"); }
-            finally { document.getElementById('loader').classList.add('hidden'); }
+                if(data.status === "success") {
+                    renderUI(data);
+                } else {
+                    notify("Bypass Failed: Check URL");
+                }
+            } catch(e) { 
+                console.error(e);
+                notify("Backend Offline! Wake up Render..."); 
+            } finally { 
+                document.getElementById('loader').classList.add('hidden'); 
+            }
         }
 
         function renderUI(data) {
             document.getElementById('resultArea').classList.remove('hidden');
             document.getElementById('metaBox').innerHTML = `
-                <img src="${data.thumbnail}" class="w-full rounded-[2.5rem] mb-6 shadow-2xl">
-                <h3 class="font-bold text-lg mb-4 italic">${data.title}</h3>
+                <img src="${data.thumbnail}" class="w-full rounded-[2.5rem] mb-6 shadow-2xl border border-white/10">
+                <h3 class="font-bold text-lg mb-4 italic leading-tight">${data.title}</h3>
                 <span class="text-[9px] font-bold bg-blue-600 px-4 py-2 rounded-full uppercase tracking-widest">${data.platform}</span>
             `;
             document.getElementById('qualityList').innerHTML = data.formats.map(f => `
                 <div class="glass p-5 rounded-3xl flex justify-between items-center group hover:border-blue-500/50 transition">
                     <div class="text-left">
                         <p class="font-black text-xs text-blue-400 uppercase italic">${f.quality}</p>
-                        <p class="text-[9px] opacity-40 font-bold">${f.size}</p>
+                        <p class="text-[9px] opacity-40 font-bold">${f.size || 'Auto Size'}</p>
                     </div>
-                    <a href="${f.url}" target="_blank" class="bg-white text-black w-10 h-10 rounded-full flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all"><i class="fas fa-download"></i></a>
+                    <a href="${f.url}" target="_blank" download class="bg-white text-black w-10 h-10 rounded-full flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all shadow-lg"><i class="fas fa-download"></i></a>
                 </div>
             `).join('');
             notify("Media Decrypted!");
+            document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth' });
         }
 
         // 3. PDF GENERATOR
@@ -174,6 +189,8 @@
             const doc = new jsPDF();
             const files = document.getElementById('pdfFiles').files;
             if(files.length === 0) return notify("Select Images First!");
+            
+            notify("Processing PDF...");
             for(let i=0; i<files.length; i++) {
                 const img = await new Promise(r => {
                     const reader = new FileReader();
@@ -187,15 +204,16 @@
             notify("PDF Generated Successfully!");
         }
 
-        // 4. VIDEO TO LINK
+        // 4. VIDEO TO LINK (LOCAL)
         document.getElementById('v2lFile').onchange = function(e) {
             const file = e.target.files[0];
             if(file) {
                 const url = URL.createObjectURL(file);
                 document.getElementById('v2lOutput').innerHTML = `
-                    <div class="glass p-6 rounded-2xl max-w-xs mx-auto">
+                    <div class="glass p-6 rounded-2xl max-w-xs mx-auto border border-green-500/20">
                         <p class="text-[9px] font-bold text-green-500 uppercase mb-2">Local Link Generated</p>
-                        <input type="text" value="${url}" class="w-full bg-black/20 p-2 rounded text-[9px] text-white" readonly>
+                        <input type="text" value="${url}" class="w-full bg-black/40 p-3 rounded-xl text-[9px] text-white border border-white/5" readonly>
+                        <p class="text-[8px] opacity-40 mt-2 italic">*Link works only on this device</p>
                     </div>
                 `;
                 notify("Link Created!");
