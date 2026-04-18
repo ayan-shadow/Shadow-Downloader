@@ -3,203 +3,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AYANX ULTIMATE | Pro Suite</title>
-    
+    <title>AYANX MULTI-SUITE | Ultimate Edition</title>
     <link rel="manifest" href="manifest.webmanifest">
-    <meta name="theme-color" content="#3b82f6">
-    <link rel="apple-touch-icon" href="logo.png">
-
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Inter:wght@400;700&display=swap');
-        :root { --blue: #3b82f6; }
-        body { font-family: 'Inter', sans-serif; transition: 0.5s; background: #000; color: #fff; overflow-x: hidden; }
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Space+Grotesk:wght@400;700&display=swap');
+        
+        /* 🎨 THEME SYSTEM */
+        :root { --primary: #3b82f6; --bg: #000; --text: #fff; --glass: rgba(255,255,255,0.05); }
+        body.theme-white { --bg: #f8fafc; --text: #0f172a; --glass: rgba(0,0,0,0.05); }
+        body.theme-grey { --bg: #334155; --text: #f8fafc; --glass: rgba(255,255,255,0.1); }
+        body.theme-red { --primary: #ef4444; }
+
+        body { font-family: 'Space Grotesk', sans-serif; background: var(--bg); color: --text; transition: 0.4s ease; }
         .font-gaming { font-family: 'Orbitron', sans-serif; }
-        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .gradient-text { background: linear-gradient(90deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .v-link.active { color: var(--blue); border-bottom: 2px solid var(--blue); opacity: 1; }
-        .v-link { opacity: 0.5; cursor: pointer; text-transform: uppercase; font-size: 10px; font-weight: bold; }
-        .warning-tag { background: #ff4d4d; color: #000; font-size: 8px; font-weight: 900; padding: 2px 8px; border-radius: 4px; }
+        .glass { background: var(--glass); border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(20px); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: slideUp 0.4s ease-out; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        #popup { position: fixed; bottom: 20px; right: 20px; z-index: 1000; display: none; }
     </style>
 </head>
-<body id="mainBody">
+<body class="text-white">
 
-    <nav class="p-4 sticky top-0 z-[100] border-b border-white/5 bg-black/80 backdrop-blur-md flex justify-between items-center">
-        <div class="font-gaming text-2xl italic text-blue-500">AYANX</div>
+    <div id="popup" class="glass px-6 py-4 rounded-2xl border-l-4 border-blue-500 shadow-2xl">
+        <p id="popupMsg" class="text-xs font-bold uppercase tracking-widest text-white"></p>
+    </div>
+
+    <nav class="p-5 border-b border-white/10 glass sticky top-0 z-50 flex justify-between items-center">
+        <div class="font-gaming text-2xl text-blue-500 italic">AYANX<span class="text-blue-200">PRO</span></div>
         <div class="flex gap-6 items-center">
-            <span onclick="switchView('downloader')" class="v-link active">Downloader</span>
-            <span onclick="switchView('v2link')" class="v-link">V2Link</span>
-            <span onclick="switchView('pdf')" class="v-link">PDF-Lab</span>
-            <button onclick="toggleSettings()" class="text-blue-500"><i class="fas fa-cog"></i></button>
+            <button onclick="switchTab('downloader')" class="text-[10px] font-bold uppercase tracking-tighter hover:text-blue-400 transition" id="btn-downloader">Downloader</button>
+            <button onclick="switchTab('v2l')" class="text-[10px] font-bold uppercase tracking-tighter opacity-40 hover:opacity-100" id="btn-v2l">V2Link</button>
+            <button onclick="switchTab('pdf')" class="text-[10px] font-bold uppercase tracking-tighter opacity-40 hover:opacity-100" id="btn-pdf">PDF Lab</button>
+            <button onclick="toggleSettings()" class="text-blue-500 text-xl hover:rotate-90 transition-all duration-500"><i class="fas fa-cog"></i></button>
         </div>
     </nav>
 
-    <div id="settingsPanel" class="fixed inset-0 z-[200] hidden bg-black/95 flex items-center justify-center p-4">
-        <div class="glass p-8 rounded-[2.5rem] max-w-sm w-full border border-blue-500/30 text-center">
-            <h2 class="font-gaming text-blue-500 mb-6 italic">SYSTEM INTERFACE</h2>
-            <div class="grid grid-cols-3 gap-2 mb-8">
-                <button onclick="applyTheme('black')" class="bg-black border border-white/10 py-3 rounded-xl text-[8px] font-bold">BLACK</button>
-                <button onclick="applyTheme('white')" class="bg-white text-black py-3 rounded-xl text-[8px] font-bold">WHITE</button>
-                <button onclick="applyTheme('grey')" class="bg-gray-700 py-3 rounded-xl text-[8px] font-bold">GREY</button>
+    <div id="settingsPanel" class="fixed inset-0 bg-black/90 hidden z-[200] flex items-center justify-center p-6">
+        <div class="glass p-10 rounded-[3rem] w-full max-w-md text-center border-blue-500/30">
+            <h2 class="font-gaming text-sm mb-8 italic">CONTROL PANEL</h2>
+            <div class="grid grid-cols-2 gap-4 mb-10">
+                <button onclick="setTheme('black')" class="bg-black border border-white/10 py-3 rounded-2xl text-[10px] font-bold uppercase">Dark Mode</button>
+                <button onclick="setTheme('white')" class="bg-white text-black py-3 rounded-2xl text-[10px] font-bold uppercase">Light Mode</button>
+                <button onclick="setTheme('grey')" class="bg-gray-600 py-3 rounded-2xl text-[10px] font-bold uppercase">Grey Mode</button>
+                <button onclick="setTheme('red')" class="bg-red-600 py-3 rounded-2xl text-[10px] font-bold uppercase">Red Theme</button>
             </div>
-            <button onclick="toggleSettings()" class="w-full bg-blue-600 py-4 rounded-xl font-gaming text-xs">SAVE SETTINGS</button>
+            <button onclick="toggleSettings()" class="w-full bg-blue-600 py-4 rounded-full font-gaming text-[10px] uppercase">Close Settings</button>
         </div>
     </div>
 
-    <main class="container mx-auto px-4 py-10 max-w-4xl">
-        <div class="flex justify-center mb-10">
-            <div class="flex items-center gap-3 glass px-4 py-2 rounded-full border-red-500/20">
-                <span class="warning-tag">ONLINE</span>
-                <p class="text-[9px] font-bold tracking-widest opacity-60 uppercase">Bypass Engine v6.0 Active</p>
+    <main class="container mx-auto max-w-5xl px-4 py-16">
+        
+        <section id="downloader" class="tab-content active">
+            <div class="text-center mb-16">
+                <h1 class="text-7xl md:text-9xl font-black font-gaming italic uppercase leading-none text-blue-600">BYPASS</h1>
+                <p class="text-[10px] font-bold opacity-30 tracking-[0.5em] mt-4 uppercase">Advanced Media Decryption</p>
             </div>
+            <div class="glass p-3 rounded-[3rem] flex flex-col md:flex-row gap-3 mb-20 shadow-2xl">
+                <input type="url" id="mediaUrl" placeholder="Paste URL here (Insta, YT, FB...)" class="flex-1 bg-transparent px-8 py-5 outline-none font-bold text-lg text-white">
+                <button onclick="fetchMedia()" class="bg-blue-600 hover:bg-white hover:text-black transition-all px-12 py-5 rounded-[2.5rem] font-gaming font-black text-sm uppercase">Initialize</button>
+            </div>
+            <div id="loader" class="hidden text-center py-20"><div class="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div></div>
+            <div id="resultArea" class="hidden grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div id="metaBox" class="glass p-8 rounded-[3rem]"></div>
+                <div id="qualityList" class="space-y-4"></div>
+            </div>
+        </section>
+
+        <section id="v2l" class="tab-content">
+            <div class="glass p-16 rounded-[4rem] text-center border-dashed border-blue-500/20">
+                <i class="fas fa-link text-6xl text-blue-500 mb-8"></i>
+                <h2 class="text-3xl font-black italic mb-6 uppercase font-gaming">V2Link Tool</h2>
+                <input type="file" id="v2lFile" class="hidden" accept="video/*">
+                <label for="v2lFile" class="bg-blue-600 px-16 py-5 rounded-full font-bold cursor-pointer inline-block">Upload Video</label>
+                <div id="v2lOutput" class="mt-10"></div>
+            </div>
+        </section>
+
+        <section id="pdf" class="tab-content">
+            <div class="glass p-16 rounded-[4rem] text-center border-dashed border-red-500/20">
+                <i class="fas fa-file-pdf text-6xl text-red-500 mb-8"></i>
+                <h2 class="text-3xl font-black italic mb-6 uppercase font-gaming">PDF LAB</h2>
+                <input type="file" id="pdfFiles" class="hidden" multiple accept="image/*">
+                <label for="pdfFiles" class="bg-red-600 px-16 py-5 rounded-full font-bold cursor-pointer inline-block">Select Images</label>
+                <button onclick="generatePDF()" class="block mx-auto mt-10 text-[10px] font-bold text-blue-400 uppercase tracking-widest underline italic">Convert to PDF</button>
+            </div>
+        </section>
+
+        <div id="installBanner" class="mt-24 glass p-10 rounded-[3rem] text-center border-blue-500/20">
+            <h3 class="font-gaming text-xs text-blue-500 italic mb-4">PLATFORM INTEGRATION</h3>
+            <p class="text-[11px] opacity-50 mb-8 max-w-md mx-auto">Convert this tool into a native app for instant access from your home screen.</p>
+            <button id="installBtn" class="bg-white text-black px-14 py-4 rounded-full font-black text-[10px] uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all">Install Application</button>
         </div>
 
-        <section id="downloaderView" class="view">
-            <div class="text-center mb-12">
-                <h1 class="font-gaming text-7xl font-black gradient-text italic">ULTIMATE</h1>
-                <p class="text-[9px] uppercase tracking-[0.5em] opacity-40 mt-2 font-bold">YouTube & 1000+ Sites Engine</p>
-            </div>
-            <div class="glass p-3 rounded-[3rem] flex flex-col md:flex-row gap-3 mb-12">
-                <input type="url" id="mediaUrl" placeholder="PASTE VIDEO LINK HERE..." class="flex-1 bg-transparent px-8 py-5 outline-none font-bold text-lg">
-                <button onclick="smartFetch()" class="bg-blue-600 px-12 py-5 rounded-[2.5rem] font-gaming font-black hover:bg-white hover:text-black transition-all">FETCH</button>
-            </div>
-            <div id="loader" class="hidden text-center mb-10">
-                <div class="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
-                <p class="font-gaming text-[8px] text-blue-500 mt-4 animate-pulse">Syncing Cloud...</p>
-            </div>
-            <div id="results" class="hidden grid grid-cols-1 md:grid-cols-2 gap-6"></div>
-        </section>
-
-        <section id="v2linkView" class="view hidden text-center">
-            <div class="glass p-16 rounded-[3rem] border-dashed border-white/10">
-                <i class="fas fa-satellite-dish text-5xl text-blue-500 mb-6"></i>
-                <h3 class="font-gaming text-sm mb-8">VIDEO TO CLOUD LINK</h3>
-                <input type="file" id="v2lInput" class="hidden">
-                <label for="v2lInput" class="bg-white text-black px-12 py-5 rounded-2xl font-bold text-[10px] cursor-pointer inline-block">UPLOAD FILE</label>
-                <div id="v2lOutput" class="mt-10 font-bold text-blue-400"></div>
-            </div>
-        </section>
-
-        <section id="pdfView" class="view hidden text-center">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="glass p-12 rounded-[3rem]">
-                    <i class="fas fa-file-pdf text-4xl text-blue-500 mb-4"></i>
-                    <h4 class="font-gaming text-[10px] mb-6">IMG TO PDF</h4>
-                    <input type="file" id="pdfInput" multiple accept="image/*" class="hidden">
-                    <label for="pdfInput" class="bg-blue-600 px-8 py-3 rounded-xl font-bold text-[9px] cursor-pointer uppercase">Select Images</label>
-                </div>
-                <div class="glass p-12 rounded-[3rem]">
-                    <i class="fas fa-shield-alt text-4xl text-red-500 mb-4"></i>
-                    <h4 class="font-gaming text-[10px] mb-6">PDF ENCRYPT</h4>
-                    <input type="file" id="pdfSec" class="hidden">
-                    <label for="pdfSec" class="bg-red-600 px-8 py-3 rounded-xl font-bold text-[9px] cursor-pointer uppercase">Select PDF</label>
-                </div>
-            </div>
-        </section>
+        <footer class="mt-32 border-t border-white/5 pt-12 text-center pb-20">
+            <p class="text-[10px] font-bold text-red-500 uppercase tracking-[0.3em] mb-4">Warning: Personal Use Only. Content theft is prohibited.</p>
+            <p class="text-[11px] font-bold opacity-30 uppercase tracking-widest italic">Product ID: AYANX-ULTIMATE-V6 <br> Developed by <span class="text-white">AYAN (BOSS)</span></p>
+        </footer>
     </main>
 
     <script>
         const API = "http://127.0.0.1:5000";
 
-        // Navigation Logic
-        function switchView(id) {
-            document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
-            document.querySelectorAll('.v-link').forEach(l => l.classList.remove('active'));
-            document.getElementById(id + 'View').classList.remove('hidden');
-            event.currentTarget.classList.add('active');
+        // 1. SYSTEM UTILS
+        function notify(msg) {
+            const p = document.getElementById('popup');
+            document.getElementById('popupMsg').innerText = msg;
+            p.style.display = 'block';
+            setTimeout(() => { p.style.display = 'none'; }, 3000);
         }
 
         function toggleSettings() { document.getElementById('settingsPanel').classList.toggle('hidden'); }
-        
-        function applyTheme(t) {
-            const b = document.getElementById('mainBody');
-            if(t === 'white') { b.style.background = "#fff"; b.style.color = "#000"; }
-            else if(t === 'grey') { b.style.background = "#1a1a1b"; b.style.color = "#fff"; }
-            else { b.style.background = "#000"; b.style.color = "#fff"; }
+
+        function setTheme(t) {
+            document.body.className = 'theme-' + t;
+            notify("Protocol: " + t.toUpperCase() + " Mode Active");
         }
 
-        // Fetching Logic
-        async function smartFetch() {
+        function switchTab(t) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('nav button').forEach(b => b.classList.add('opacity-40'));
+            document.getElementById(t).classList.add('active');
+            document.getElementById('btn-'+t).classList.remove('opacity-40');
+            notify("Switching to " + t.toUpperCase());
+        }
+
+        // 2. DOWNLOADER ENGINE
+        async function fetchMedia() {
             const url = document.getElementById('mediaUrl').value;
-            if(!url) return alert("Link kahan hai Boss?");
-            
+            if(!url) return notify("Input Required!");
             document.getElementById('loader').classList.remove('hidden');
-            document.getElementById('results').classList.add('hidden');
-
+            document.getElementById('resultArea').classList.add('hidden');
             try {
-                if(url.includes('youtube.com') || url.includes('youtu.be')) {
-                    const info = await (await fetch(`${API}/video_info`, {
-                        method: 'POST', headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({url})
-                    })).json();
-                    const res = await (await fetch(`${API}/available_resolutions`, {
-                        method: 'POST', headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({url})
-                    })).json();
-                    renderUI(info.title, info.author, res.progressive, url, true);
-                } else {
-                    const data = await (await fetch(`${API}/vkr_fetch`, {
-                        method: 'POST', headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({url})
-                    })).json();
-                    const formats = data.formats.map(f => f.format_id || f.quality || 'MP4');
-                    renderUI(data.title, data.source, formats, url, false, data.formats);
-                }
-            } catch(e) {
-                alert("Engine Offline! Terminal mein server chalu karein.");
-            } finally {
-                document.getElementById('loader').classList.add('hidden');
-            }
-        }
-
-        function renderUI(title, author, resolutions, url, isYT, vkrData=[]) {
-            const resDiv = document.getElementById('results');
-            resDiv.classList.remove('hidden');
-            let btns = resolutions.map((r, i) => `
-                <button onclick="${isYT ? `dlYT('${url}','${r}')` : `window.open('${vkrData[i].url}')`}" class="w-full glass border border-white/10 p-4 rounded-2xl flex justify-between items-center hover:bg-blue-600 transition-all font-bold text-[10px]">
-                    <span>${r} MP4</span><i class="fas fa-download opacity-30"></i>
-                </button>
-            `).join('');
-            
-            resDiv.innerHTML = `
-                <div class="glass p-8 rounded-[2.5rem] border-blue-500/20">
-                    <h3 class="font-bold text-sm mb-2 italic">${title}</h3>
-                    <p class="text-[9px] opacity-40 uppercase tracking-widest">${author}</p>
-                </div>
-                <div class="space-y-3">${btns}</div>
-            `;
-        }
-
-        async function dlYT(url, res) {
-            document.getElementById('loader').classList.remove('hidden');
-            const response = await fetch(`${API}/download/${res}`, {
-                method: 'POST', headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({url})
-            });
-            const blob = await response.blob();
-            const a = document.createElement('a');
-            a.href = window.URL.createObjectURL(blob);
-            a.download = `AyanX_${res}.mp4`;
-            a.click();
-            document.getElementById('loader').classList.add('hidden');
-        }
-
-        // PDF Logic
-        document.getElementById('pdfInput').addEventListener('change', async (e) => {
-            const { jsPDF } = window.jspdf; const doc = new jsPDF();
-            for(let i=0; i<e.target.files.length; i++) {
-                const data = await new Promise(r => { 
-                    const reader = new FileReader(); 
-                    reader.onload=ev=>r(ev.target.result); 
-                    reader.readAsDataURL(e.target.files[i]); 
+                const res = await fetch(`${API}/smart_fetch`, {
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({url})
                 });
-                if(i>0) doc.addPage();
-                doc.addImage(data, 'JPEG', 10, 10, 190, 140);
+                const data = await res.json();
+                if(data.status === "success") renderUI(data);
+                else notify("Bypass Failed!");
+            } catch(e) { notify("Backend Offline!"); }
+            finally { document.getElementById('loader').classList.add('hidden'); }
+        }
+
+        function renderUI(data) {
+            document.getElementById('resultArea').classList.remove('hidden');
+            document.getElementById('metaBox').innerHTML = `
+                <img src="${data.thumbnail}" class="w-full rounded-[2.5rem] mb-6 shadow-2xl">
+                <h3 class="font-bold text-lg mb-4 italic">${data.title}</h3>
+                <span class="text-[9px] font-bold bg-blue-600 px-4 py-2 rounded-full uppercase tracking-widest">${data.platform}</span>
+            `;
+            document.getElementById('qualityList').innerHTML = data.formats.map(f => `
+                <div class="glass p-5 rounded-3xl flex justify-between items-center group hover:border-blue-500/50 transition">
+                    <div class="text-left">
+                        <p class="font-black text-xs text-blue-400 uppercase italic">${f.quality}</p>
+                        <p class="text-[9px] opacity-40 font-bold">${f.size}</p>
+                    </div>
+                    <a href="${f.url}" target="_blank" class="bg-white text-black w-10 h-10 rounded-full flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all"><i class="fas fa-download"></i></a>
+                </div>
+            `).join('');
+            notify("Media Decrypted!");
+        }
+
+        // 3. PDF GENERATOR
+        async function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const files = document.getElementById('pdfFiles').files;
+            if(files.length === 0) return notify("Select Images First!");
+            for(let i=0; i<files.length; i++) {
+                const img = await new Promise(r => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => r(e.target.result);
+                    reader.readAsDataURL(files[i]);
+                });
+                if(i > 0) doc.addPage();
+                doc.addImage(img, 'JPEG', 10, 10, 190, 150);
             }
-            doc.save("AyanX_PDF.pdf");
+            doc.save("AyanX_Ultimate_PDF.pdf");
+            notify("PDF Generated Successfully!");
+        }
+
+        // 4. VIDEO TO LINK
+        document.getElementById('v2lFile').onchange = function(e) {
+            const file = e.target.files[0];
+            if(file) {
+                const url = URL.createObjectURL(file);
+                document.getElementById('v2lOutput').innerHTML = `
+                    <div class="glass p-6 rounded-2xl max-w-xs mx-auto">
+                        <p class="text-[9px] font-bold text-green-500 uppercase mb-2">Local Link Generated</p>
+                        <input type="text" value="${url}" class="w-full bg-black/20 p-2 rounded text-[9px] text-white" readonly>
+                    </div>
+                `;
+                notify("Link Created!");
+            }
+        };
+
+        // 5. PWA INSTALL LOGIC
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+        });
+        document.getElementById('installBtn').addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') notify("App Installed Successfully!");
+                deferredPrompt = null;
+            } else {
+                notify("Try Chrome -> Install App");
+            }
         });
     </script>
 </body>

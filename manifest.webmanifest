@@ -1,7 +1,6 @@
 {
-  "name": "AYANX ULTIMATE DOWNLOADER",
+  "name": "AYANX PRO DOWNLOADER",
   "short_name": "AyanX",
-  "description": "1000+ Sites Video Downloader by Ayan",
   "start_url": "index.html",
   "display": "standalone",
   "background_color": "#000000",

@@ -1,68 +1,66 @@
 from flask import Flask, request, jsonify, send_file
-from pytubefix import YouTube
 from flask_cors import CORS
+import yt_dlp
 import requests
 import io
-import os
 
 app = Flask(__name__)
 CORS(app)
 
-# 1. YouTube Info & Download Logic
-@app.route('/video_info', methods=['POST'])
-def video_info():
+# Instagram aur FB ki images bypass karne ke liye proxy
+@app.route('/proxy_img')
+def proxy_img():
+    img_url = request.args.get('url')
+    if not img_url: return "No URL", 400
     try:
-        data = request.get_json()
-        url = data.get('url')
-        yt = YouTube(url)
-        return jsonify({
-            "title": yt.title,
-            "author": yt.author,
-            "thumbnail": yt.thumbnail_url,
-            "views": yt.views
-        })
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-@app.route('/available_resolutions', methods=['POST'])
-def available_resolutions():
-    try:
-        data = request.get_json()
-        url = data.get('url')
-        yt = YouTube(url)
-        res = [s.resolution for s in yt.streams.filter(progressive=True, file_extension='mp4') if s.resolution]
-        return jsonify({"progressive": list(set(res))})
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-@app.route('/download/<resolution>', methods=['POST'])
-def download(resolution):
-    try:
-        data = request.get_json()
-        url = data.get('url')
-        yt = YouTube(url)
-        stream = yt.streams.filter(progressive=True, file_extension='mp4', resolution=resolution).first()
-        if not stream: return jsonify({"error": "Res not found"}), 404
-        
-        buffer = io.BytesIO()
-        stream.stream_to_buffer(buffer)
-        buffer.seek(0)
-        return send_file(buffer, as_attachment=True, download_name=f"AyanX_{resolution}.mp4", mimetype="video/mp4")
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-# 2. VKr API Helper (For 1000+ Sites)
-@app.route('/vkr_fetch', methods=['POST'])
-def vkr_fetch():
-    data = request.get_json()
-    url = data.get('url')
-    vkr_url = f"https://vkrdownloader.org/server/?api_key=vkrdownloader&vkr={url}"
-    try:
-        response = requests.get(vkr_url)
-        return jsonify(response.json())
+        res = requests.get(img_url, stream=True, timeout=10)
+        return send_file(io.BytesIO(res.content), mimetype='image/jpeg')
     except:
-        return jsonify({"error": "VKr Engine Offline"}), 500
+        return "Error", 500
+
+@app.route('/smart_fetch', methods=['POST'])
+def smart_fetch():
+    try:
+        data = request.get_json()
+        url = data.get('url')
+        
+        ydl_opts = {
+            'quiet': True,
+            'no_warnings': True,
+            'format': 'best',
+            'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        }
+
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(url, download=False)
+            formats = []
+            
+            if 'formats' in info:
+                for f in info['formats']:
+                    if f.get('vcodec') != 'none' and f.get('acodec') != 'none':
+                        formats.append({
+                            "quality": f.get('format_note') or f.get('resolution') or "MP4",
+                            "size": f"{round(f.get('filesize', 0) / 1048576, 1)} MB" if f.get('filesize') else "HD",
+                            "url": f['url']
+                        })
+            
+            if not formats and 'url' in info:
+                formats.append({"quality": "High Quality", "size": "Auto", "url": info['url']})
+
+            thumb = info.get('thumbnail', '')
+            if "instagram" in url or "fbcdn" in thumb:
+                thumb = f"http://127.0.0.1:5000/proxy_img?url={thumb}"
+
+            return jsonify({
+                "status": "success",
+                "title": info.get('title', 'Video Found'),
+                "thumbnail": thumb,
+                "platform": info.get('extractor_key', 'Social'),
+                "formats": formats[:6]
+            })
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 if __name__ == '__main__':
-    print("🚀 AYANX MASTER ENGINE STARTING...")
+    print("🚀 AYANX ULTIMATE ENGINE ONLINE (PORT 5000)")
     app.run(debug=True, port=5000)
