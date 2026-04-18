@@ -3,6 +3,7 @@ from flask_cors import CORS
 import yt_dlp
 import requests
 import io
+import os
 
 app = Flask(__name__)
 CORS(app)
@@ -13,7 +14,9 @@ def proxy_img():
     img_url = request.args.get('url')
     if not img_url: return "No URL", 400
     try:
-        res = requests.get(img_url, stream=True, timeout=10)
+        # Headers add kiye taaki Instagram block na kare
+        headers = {'User-Agent': 'Mozilla/5.0'}
+        res = requests.get(img_url, headers=headers, stream=True, timeout=10)
         return send_file(io.BytesIO(res.content), mimetype='image/jpeg')
     except:
         return "Error", 500
@@ -36,6 +39,7 @@ def smart_fetch():
             formats = []
             
             if 'formats' in info:
+                # Sirf wo formats le rahe hain jisme video aur audio dono ho
                 for f in info['formats']:
                     if f.get('vcodec') != 'none' and f.get('acodec') != 'none':
                         formats.append({
@@ -48,8 +52,12 @@ def smart_fetch():
                 formats.append({"quality": "High Quality", "size": "Auto", "url": info['url']})
 
             thumb = info.get('thumbnail', '')
+            
+            # --- FIX YAHAN HAI ---
+            # Hum localhost ka naam nahi balki current server ka domain use karenge
+            host = request.host_url.rstrip('/') 
             if "instagram" in url or "fbcdn" in thumb:
-                thumb = f"http://127.0.0.1:5000/proxy_img?url={thumb}"
+                thumb = f"{host}/proxy_img?url={thumb}"
 
             return jsonify({
                 "status": "success",
@@ -62,5 +70,6 @@ def smart_fetch():
         return jsonify({"status": "error", "message": str(e)}), 500
 
 if __name__ == '__main__':
-    print("🚀 AYANX ULTIMATE ENGINE ONLINE (PORT 5000)")
-    app.run(debug=True, port=5000)
+    # Render ke liye port dynamic hona chahiye
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
