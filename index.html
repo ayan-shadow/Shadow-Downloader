@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AYANX ULTIMATE | All-In-One Suite</title>
+    <title>AYANX ULTIMATE | Pro Suite</title>
     
-    <script type='text/javascript' src='//pl26073702.highcpmgate.com/8a/91/3a/8a913a4471f654b8883fa848f37fea48.js'></script>
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="theme-color" content="#3b82f6">
+    <link rel="apple-touch-icon" href="logo.png">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -23,7 +25,7 @@
         .warning-tag { background: #ff4d4d; color: #000; font-size: 8px; font-weight: 900; padding: 2px 8px; border-radius: 4px; }
     </style>
 </head>
-<body id="mainBody" class="theme-black">
+<body id="mainBody">
 
     <nav class="p-4 sticky top-0 z-[100] border-b border-white/5 bg-black/80 backdrop-blur-md flex justify-between items-center">
         <div class="font-gaming text-2xl italic text-blue-500">AYANX</div>
@@ -31,84 +33,78 @@
             <span onclick="switchView('downloader')" class="v-link active">Downloader</span>
             <span onclick="switchView('v2link')" class="v-link">V2Link</span>
             <span onclick="switchView('pdf')" class="v-link">PDF-Lab</span>
-            <button onclick="toggleSettings()" class="text-blue-500"><i class="fas fa-sliders-h"></i></button>
+            <button onclick="toggleSettings()" class="text-blue-500"><i class="fas fa-cog"></i></button>
         </div>
     </nav>
 
     <div id="settingsPanel" class="fixed inset-0 z-[200] hidden bg-black/95 flex items-center justify-center p-4">
         <div class="glass p-8 rounded-[2.5rem] max-w-sm w-full border border-blue-500/30 text-center">
-            <h2 class="font-gaming text-blue-500 mb-6 italic">SYSTEM CORE</h2>
+            <h2 class="font-gaming text-blue-500 mb-6 italic">SYSTEM INTERFACE</h2>
             <div class="grid grid-cols-3 gap-2 mb-8">
                 <button onclick="applyTheme('black')" class="bg-black border border-white/10 py-3 rounded-xl text-[8px] font-bold">BLACK</button>
                 <button onclick="applyTheme('white')" class="bg-white text-black py-3 rounded-xl text-[8px] font-bold">WHITE</button>
                 <button onclick="applyTheme('grey')" class="bg-gray-700 py-3 rounded-xl text-[8px] font-bold">GREY</button>
             </div>
-            <button onclick="toggleSettings()" class="w-full bg-blue-600 py-4 rounded-xl font-gaming text-xs">EXIT SETTINGS</button>
+            <button onclick="toggleSettings()" class="w-full bg-blue-600 py-4 rounded-xl font-gaming text-xs">SAVE SETTINGS</button>
         </div>
     </div>
 
     <main class="container mx-auto px-4 py-10 max-w-4xl">
-        
         <div class="flex justify-center mb-10">
             <div class="flex items-center gap-3 glass px-4 py-2 rounded-full border-red-500/20">
-                <span class="warning-tag">WARNING</span>
-                <p class="text-[9px] font-bold tracking-widest opacity-60">ENCRYPTION BYPASS ACTIVE : PROXY 127.0.0.1</p>
+                <span class="warning-tag">ONLINE</span>
+                <p class="text-[9px] font-bold tracking-widest opacity-60 uppercase">Bypass Engine v6.0 Active</p>
             </div>
         </div>
 
         <section id="downloaderView" class="view">
             <div class="text-center mb-12">
                 <h1 class="font-gaming text-7xl font-black gradient-text italic">ULTIMATE</h1>
-                <p class="text-[9px] uppercase tracking-[0.5em] opacity-40 mt-2 font-bold">Advanced Extraction Engine</p>
+                <p class="text-[9px] uppercase tracking-[0.5em] opacity-40 mt-2 font-bold">YouTube & 1000+ Sites Engine</p>
             </div>
-            <div class="glass p-3 rounded-[3rem] flex flex-col md:flex-row gap-3 mb-12 border-blue-500/10">
-                <input type="url" id="mediaUrl" placeholder="PASTE YOUTUBE OR SOCIAL LINK..." class="flex-1 bg-transparent px-8 py-5 outline-none font-bold text-lg">
-                <button onclick="processLink()" class="bg-blue-600 px-12 py-5 rounded-[2.5rem] font-gaming font-black hover:bg-white hover:text-black transition-all">FETCH</button>
+            <div class="glass p-3 rounded-[3rem] flex flex-col md:flex-row gap-3 mb-12">
+                <input type="url" id="mediaUrl" placeholder="PASTE VIDEO LINK HERE..." class="flex-1 bg-transparent px-8 py-5 outline-none font-bold text-lg">
+                <button onclick="smartFetch()" class="bg-blue-600 px-12 py-5 rounded-[2.5rem] font-gaming font-black hover:bg-white hover:text-black transition-all">FETCH</button>
             </div>
-            
             <div id="loader" class="hidden text-center mb-10">
-                <div class="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                <p class="font-gaming text-[8px] text-blue-500 animate-pulse">Establishing Tunnel...</p>
+                <div class="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+                <p class="font-gaming text-[8px] text-blue-500 mt-4 animate-pulse">Syncing Cloud...</p>
             </div>
-
             <div id="results" class="hidden grid grid-cols-1 md:grid-cols-2 gap-6"></div>
         </section>
 
-        <section id="v2linkView" class="view hidden">
-            <div class="glass p-16 rounded-[3rem] text-center border-dashed border-white/10">
+        <section id="v2linkView" class="view hidden text-center">
+            <div class="glass p-16 rounded-[3rem] border-dashed border-white/10">
                 <i class="fas fa-satellite-dish text-5xl text-blue-500 mb-6"></i>
-                <h3 class="font-gaming text-sm mb-8">VIDEO TO DIRECT LINK CLOUD</h3>
+                <h3 class="font-gaming text-sm mb-8">VIDEO TO CLOUD LINK</h3>
                 <input type="file" id="v2lInput" class="hidden">
-                <label for="v2lInput" class="bg-white text-black px-12 py-5 rounded-2xl font-gaming text-[10px] cursor-pointer inline-block hover:scale-105 transition-all">UPLOAD FILE</label>
+                <label for="v2lInput" class="bg-white text-black px-12 py-5 rounded-2xl font-bold text-[10px] cursor-pointer inline-block">UPLOAD FILE</label>
                 <div id="v2lOutput" class="mt-10 font-bold text-blue-400"></div>
             </div>
         </section>
 
-        <section id="pdfView" class="view hidden">
+        <section id="pdfView" class="view hidden text-center">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="glass p-12 rounded-[3rem] text-center group hover:border-blue-500 transition-all">
+                <div class="glass p-12 rounded-[3rem]">
                     <i class="fas fa-file-pdf text-4xl text-blue-500 mb-4"></i>
-                    <h4 class="font-gaming text-[10px] mb-6">IMG TO PDF CONVERTER</h4>
+                    <h4 class="font-gaming text-[10px] mb-6">IMG TO PDF</h4>
                     <input type="file" id="pdfInput" multiple accept="image/*" class="hidden">
-                    <label for="pdfInput" class="bg-blue-600 px-8 py-3 rounded-xl font-bold text-[9px] cursor-pointer">SELECT IMAGES</label>
+                    <label for="pdfInput" class="bg-blue-600 px-8 py-3 rounded-xl font-bold text-[9px] cursor-pointer uppercase">Select Images</label>
                 </div>
-                <div class="glass p-12 rounded-[3rem] text-center group hover:border-red-500 transition-all">
+                <div class="glass p-12 rounded-[3rem]">
                     <i class="fas fa-shield-alt text-4xl text-red-500 mb-4"></i>
-                    <h4 class="font-gaming text-[10px] mb-6">PDF SECURITY LAYER</h4>
-                    <input type="file" id="pdfSec" accept="application/pdf" class="hidden">
-                    <label for="pdfSec" class="bg-red-600 px-8 py-3 rounded-xl font-bold text-[9px] cursor-pointer">ENCRYPT PDF</label>
+                    <h4 class="font-gaming text-[10px] mb-6">PDF ENCRYPT</h4>
+                    <input type="file" id="pdfSec" class="hidden">
+                    <label for="pdfSec" class="bg-red-600 px-8 py-3 rounded-xl font-bold text-[9px] cursor-pointer uppercase">Select PDF</label>
                 </div>
             </div>
         </section>
-
     </main>
 
     <script>
-        const FLASK_API = "http://127.0.0.1:5000";
-        const RAPID_API = "https://social-download-all-in-one.p.rapidapi.com/v1/social/autolink";
-        const RAPID_KEY = "29f8c3b79amshc7b9755d426320dp1b94fajsn62b1821d47db";
+        const API = "http://127.0.0.1:5000";
 
-        // UI SWITCHER
+        // Navigation Logic
         function switchView(id) {
             document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
             document.querySelectorAll('.v-link').forEach(l => l.classList.remove('active'));
@@ -117,63 +113,54 @@
         }
 
         function toggleSettings() { document.getElementById('settingsPanel').classList.toggle('hidden'); }
+        
         function applyTheme(t) {
-            const body = document.getElementById('mainBody');
-            body.className = 'theme-' + t;
-            if(t === 'white') { body.style.background = "#fff"; body.style.color = "#000"; }
-            else if(t === 'grey') { body.style.background = "#1a1a1b"; body.style.color = "#fff"; }
-            else { body.style.background = "#000"; body.style.color = "#fff"; }
+            const b = document.getElementById('mainBody');
+            if(t === 'white') { b.style.background = "#fff"; b.style.color = "#000"; }
+            else if(t === 'grey') { b.style.background = "#1a1a1b"; b.style.color = "#fff"; }
+            else { b.style.background = "#000"; b.style.color = "#fff"; }
         }
 
-        // DOWNLOADER LOGIC
-        async function processLink() {
+        // Fetching Logic
+        async function smartFetch() {
             const url = document.getElementById('mediaUrl').value;
-            if(!url) return;
+            if(!url) return alert("Link kahan hai Boss?");
+            
             document.getElementById('loader').classList.remove('hidden');
             document.getElementById('results').classList.add('hidden');
 
-            if(url.includes('youtube.com') || url.includes('youtu.be')) {
-                fetchYouTube(url);
-            } else {
-                fetchSocial(url);
+            try {
+                if(url.includes('youtube.com') || url.includes('youtu.be')) {
+                    const info = await (await fetch(`${API}/video_info`, {
+                        method: 'POST', headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({url})
+                    })).json();
+                    const res = await (await fetch(`${API}/available_resolutions`, {
+                        method: 'POST', headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({url})
+                    })).json();
+                    renderUI(info.title, info.author, res.progressive, url, true);
+                } else {
+                    const data = await (await fetch(`${API}/vkr_fetch`, {
+                        method: 'POST', headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({url})
+                    })).json();
+                    const formats = data.formats.map(f => f.format_id || f.quality || 'MP4');
+                    renderUI(data.title, data.source, formats, url, false, data.formats);
+                }
+            } catch(e) {
+                alert("Engine Offline! Terminal mein server chalu karein.");
+            } finally {
+                document.getElementById('loader').classList.add('hidden');
             }
         }
 
-        async function fetchYouTube(url) {
-            try {
-                const info = await (await fetch(`${FLASK_API}/video_info`, {
-                    method: 'POST', headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({url: url})
-                })).json();
-
-                const resData = await (await fetch(`${FLASK_API}/available_resolutions`, {
-                    method: 'POST', headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({url: url})
-                })).json();
-
-                renderUI(info.title, info.author, resData.progressive, url, true);
-            } catch(e) { alert("Flask Server Offline!"); }
-            finally { document.getElementById('loader').classList.add('hidden'); }
-        }
-
-        async function fetchSocial(url) {
-            try {
-                const data = await (await fetch(RAPID_API, {
-                    method: 'POST', headers: {'Content-Type': 'application/json', 'X-RapidAPI-Key': RAPID_KEY},
-                    body: JSON.stringify({url: url})
-                })).json();
-                renderUI(data.title, data.source, data.medias.map(m=>m.quality), url, false, data.medias);
-            } catch(e) { alert("API Error!"); }
-            finally { document.getElementById('loader').classList.add('hidden'); }
-        }
-
-        function renderUI(title, author, resolutions, url, isYT, medias=[]) {
+        function renderUI(title, author, resolutions, url, isYT, vkrData=[]) {
             const resDiv = document.getElementById('results');
             resDiv.classList.remove('hidden');
             let btns = resolutions.map((r, i) => `
-                <button onclick="${isYT ? `dlYT('${url}','${r}')` : `window.open('${medias[i].url}')`}" class="w-full glass border border-white/10 p-4 rounded-2xl flex justify-between items-center hover:bg-blue-600 transition-all group">
-                    <span class="font-bold text-[10px] uppercase">${r} MP4</span>
-                    <i class="fas fa-download opacity-30 group-hover:opacity-100"></i>
+                <button onclick="${isYT ? `dlYT('${url}','${r}')` : `window.open('${vkrData[i].url}')`}" class="w-full glass border border-white/10 p-4 rounded-2xl flex justify-between items-center hover:bg-blue-600 transition-all font-bold text-[10px]">
+                    <span>${r} MP4</span><i class="fas fa-download opacity-30"></i>
                 </button>
             `).join('');
             
@@ -188,9 +175,9 @@
 
         async function dlYT(url, res) {
             document.getElementById('loader').classList.remove('hidden');
-            const response = await fetch(`${FLASK_API}/download/${res}`, {
+            const response = await fetch(`${API}/download/${res}`, {
                 method: 'POST', headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({url: url})
+                body: JSON.stringify({url})
             });
             const blob = await response.blob();
             const a = document.createElement('a');
@@ -200,10 +187,9 @@
             document.getElementById('loader').classList.add('hidden');
         }
 
-        // PDF ENGINE
+        // PDF Logic
         document.getElementById('pdfInput').addEventListener('change', async (e) => {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
+            const { jsPDF } = window.jspdf; const doc = new jsPDF();
             for(let i=0; i<e.target.files.length; i++) {
                 const data = await new Promise(r => { 
                     const reader = new FileReader(); 
@@ -214,15 +200,6 @@
                 doc.addImage(data, 'JPEG', 10, 10, 190, 140);
             }
             doc.save("AyanX_PDF.pdf");
-        });
-
-        // V2LINK ENGINE
-        document.getElementById('v2lInput').addEventListener('change', async (e) => {
-            document.getElementById('v2lOutput').innerText = "CLONING TO CLOUD...";
-            const fd = new FormData(); fd.append('file', e.target.files[0]);
-            const r = await fetch('https://file.io', {method:'POST', body:fd});
-            const d = await r.json();
-            document.getElementById('v2lOutput').innerHTML = `URL: <input readonly value="${d.link}" class="bg-blue-600 p-2 rounded ml-2 text-[10px]">`;
         });
     </script>
 </body>

@@ -1,11 +1,14 @@
 from flask import Flask, request, jsonify, send_file
 from pytubefix import YouTube
 from flask_cors import CORS
+import requests
 import io
+import os
 
 app = Flask(__name__)
 CORS(app)
 
+# 1. YouTube Info & Download Logic
 @app.route('/video_info', methods=['POST'])
 def video_info():
     try:
@@ -48,5 +51,18 @@ def download(resolution):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+# 2. VKr API Helper (For 1000+ Sites)
+@app.route('/vkr_fetch', methods=['POST'])
+def vkr_fetch():
+    data = request.get_json()
+    url = data.get('url')
+    vkr_url = f"https://vkrdownloader.org/server/?api_key=vkrdownloader&vkr={url}"
+    try:
+        response = requests.get(vkr_url)
+        return jsonify(response.json())
+    except:
+        return jsonify({"error": "VKr Engine Offline"}), 500
+
 if __name__ == '__main__':
+    print("🚀 AYANX MASTER ENGINE STARTING...")
     app.run(debug=True, port=5000)
