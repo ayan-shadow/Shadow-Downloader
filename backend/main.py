@@ -27,18 +27,26 @@ def smart_fetch():
         url = data.get('url')
         
         # --- DYNAMIC COOKIE LOGIC ---
-        # YouTube ke liye yt_cookies.txt aur baki sab ke liye cookies.txt
         cookie_file = 'cookies.txt'
-        if 'youtube.com' in url or 'youtu.be' in url:
+        is_youtube = 'youtube.com' in url or 'youtu.be' in url
+        
+        if is_youtube:
             cookie_file = 'yt_cookies.txt'
 
         ydl_opts = {
             'quiet': True,
             'no_warnings': True,
             'format': 'best',
-            'cookiefile': cookie_file, # Chunna gaya cookie file
-            'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'cookiefile': cookie_file,
+            # Naya User-Agent jo zyada "Human" lagta hai
+            'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
             'nocheckcertificate': True,
+            'geo_bypass': True,
+            'referer': 'https://www.google.com/',
+            'headers': {
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+                'Accept-Language': 'en-US,en;q=0.5',
+            }
         }
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -47,6 +55,7 @@ def smart_fetch():
             
             if 'formats' in info:
                 for f in info['formats']:
+                    # Filter: Sirf wo files jo video + audio dono contain karti hain
                     if f.get('vcodec') != 'none' and f.get('acodec') != 'none':
                         formats.append({
                             "quality": f.get('format_note') or f.get('resolution') or "MP4",
@@ -71,6 +80,7 @@ def smart_fetch():
                 "formats": formats[:6]
             })
     except Exception as e:
+        # Error message ko thoda clear dikhane ke liye
         return jsonify({"status": "error", "message": str(e)}), 500
 
 if __name__ == '__main__':
