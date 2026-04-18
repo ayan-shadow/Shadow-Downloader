@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Inter:wght@400;700&display=swap');
+
+:root { --blue: #3b82f6; --anim: 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+body { font-family: 'Inter', sans-serif; min-height: 100vh; overflow-x: hidden; }
+.font-gaming { font-family: 'Orbitron', sans-serif; }
+
+/* --- THEME SYSTEM --- */
+.theme-black { background: #000; color: #fff; }
+.theme-white { background: #fdfdfd; color: #000; }
+.theme-grey { background: #1a1a1b; color: #e1e1e1; }
+
+.theme-white .glass { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.1); }
+.theme-white .nav-blur { background: rgba(255,255,255,0.8); }
+.theme-grey .glass { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.05); }
+
+/* --- UI ELEMENTS --- */
+.nav-blur { backdrop-filter: blur(20px); background: rgba(0,0,0,0.8); }
+.glass { backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.05); }
+.neon-border { border: 1px solid rgba(59, 130, 246, 0.2); box-shadow: 0 0 50px rgba(59, 130, 246, 0.03); }
+.gradient-text { background: linear-gradient(90deg, #3b82f6, #8b5cf6); --background-clip: text; -webkit-text-fill-color: transparent; }
+
+/* --- BUTTONS & TABS --- */
+.v-link { transition: 0.3s; padding-bottom: 5px; opacity: 0.5; border-bottom: 2px solid transparent; }
+.v-link.active { opacity: 1; border-color: var(--blue); color: var(--blue); }
+.settings-btn { font-size: 1.2rem; color: var(--blue); transition: 0.5s; }
+.settings-btn:hover { transform: rotate(180deg); }
+
+/* --- ANIMATIONS --- */
+@keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.view.animate-in { animation: slideIn var(--anim) forwards; }
+@keyframes loadingLine { 0% { width: 0; } 100% { width: 100%; } }
+.animate-pulse-line { animation: loadingLine 2s infinite ease-in-out; }

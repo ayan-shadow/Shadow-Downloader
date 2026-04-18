@@ -1,0 +1,5 @@
+{
+  "rewrites": [
+    { "source": "/smart_fetch", "destination": "backend/main.py" }
+  ]
+}
