@@ -3,228 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AYANX ULTIMATE | Multi-Protocol Suite</title>
-    
-    <script type='text/javascript' src='//pl26073702.highcpmgate.com/8a/91/3a/8a913a4471f654b8883fa848f37fea48.js'></script>
-
+    <title>AYANX ULTIMATE | Pro Downloader</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Inter:wght@400;700&display=swap');
-        :root { --blue: #3b82f6; }
-        body { font-family: 'Inter', sans-serif; min-height: 100vh; transition: 0.5s; }
+        body { background: #000; color: #fff; font-family: 'Inter', sans-serif; }
         .font-gaming { font-family: 'Orbitron', sans-serif; }
-
-        /* THEMES */
-        .theme-black { background: #000; color: #fff; }
-        .theme-white { background: #fdfdfd; color: #000; }
-        .theme-grey { background: #1a1a1b; color: #e1e1e1; }
-
         .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .theme-white .glass { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.1); }
-        .nav-blur { backdrop-filter: blur(15px); background: rgba(0,0,0,0.8); }
-        .gradient-text { background: linear-gradient(90deg, #3b82f6, #8b5cf6); --background-clip: text; -webkit-text-fill-color: transparent; }
-        .v-link.active { color: var(--blue); border-bottom: 2px solid var(--blue); opacity: 1; }
-        .v-link { opacity: 0.5; padding-bottom: 5px; font-size: 10px; text-transform: uppercase; font-weight: bold; }
-        
-        @keyframes pulse-line { 0% { width: 0; } 100% { width: 100%; } }
-        .animate-pulse-line { animation: pulse-line 2s infinite linear; }
+        .gradient-text { background: linear-gradient(90deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     </style>
 </head>
-<body id="mainBody" class="theme-black">
+<body>
 
-    <nav class="nav-blur p-4 sticky top-0 z-[100] border-b border-white/5 flex justify-between items-center">
+    <nav class="p-6 border-b border-white/5 flex justify-between items-center">
         <div class="font-gaming text-2xl italic text-blue-500">AYANX</div>
-        <div class="flex gap-6">
-            <button onclick="switchView('downloader')" class="v-link active">Downloader</button>
-            <button onclick="switchView('v2link')" class="v-link">V2Link</button>
-            <button onclick="switchView('pdf')" class="v-link">PDF-Lab</button>
-            <button onclick="toggleSettings()" class="text-blue-500"><i class="fas fa-cog"></i></button>
-        </div>
+        <div class="text-[10px] font-bold opacity-40 uppercase tracking-widest">v5.0 Ultimate</div>
     </nav>
 
-    <div id="settingsPanel" class="fixed inset-0 z-[200] hidden bg-black/90 flex items-center justify-center p-4">
-        <div class="glass p-8 rounded-[2rem] max-w-sm w-full border border-blue-500/30">
-            <h2 class="font-gaming text-blue-500 mb-6 text-center">SYSTEM SETTINGS</h2>
-            <div class="grid grid-cols-3 gap-2 mb-8">
-                <button onclick="applyTheme('black')" class="bg-black border border-white/20 py-3 rounded-xl text-[8px] uppercase font-bold">Black</button>
-                <button onclick="applyTheme('white')" class="bg-white text-black py-3 rounded-xl text-[8px] uppercase font-bold">White</button>
-                <button onclick="applyTheme('grey')" class="bg-gray-600 py-3 rounded-xl text-[8px] uppercase font-bold text-white">Grey</button>
-            </div>
-            <button onclick="toggleSettings()" class="w-full bg-blue-600 py-4 rounded-xl font-gaming text-xs">SAVE</button>
+    <main class="container mx-auto px-4 py-20 max-w-4xl text-center">
+        <h1 class="font-gaming text-7xl font-black gradient-text mb-4 italic">BYPASS-X</h1>
+        <p class="text-[10px] opacity-40 mb-12 tracking-[0.4em]">YOUTUBE & SOCIAL MEDIA DIRECT ENGINE</p>
+
+        <div class="glass p-3 rounded-[3rem] flex flex-col md:flex-row gap-3 mb-10">
+            <input type="url" id="linkBox" placeholder="Paste YouTube Link Here..." class="flex-1 bg-transparent px-8 py-5 outline-none font-bold text-lg">
+            <button onclick="fetchInfo()" class="bg-blue-600 px-12 py-5 rounded-[2.5rem] font-gaming font-black hover:bg-white hover:text-black transition-all">FETCH</button>
         </div>
-    </div>
 
-    <main class="container mx-auto px-4 py-10 max-w-4xl">
-        <div class="mb-10 text-center opacity-40 italic text-[10px]">SPONSORED PROTOCOL ACTIVE</div>
+        <div id="loader" class="hidden mb-10">
+            <div class="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+            <p class="mt-4 text-[10px] font-gaming animate-pulse">Syncing with Python Engine...</p>
+        </div>
 
-        <section id="downloaderView" class="view">
-            <div class="text-center mb-12">
-                <h1 class="font-gaming text-6xl font-black gradient-text italic">ULTIMATE</h1>
-                <p class="text-[9px] uppercase tracking-[0.5em] opacity-40">YouTube & Social Media Bypass</p>
-            </div>
-            <div class="glass p-3 rounded-[3rem] flex flex-col md:flex-row gap-3 mb-8">
-                <input type="url" id="mediaUrl" placeholder="PASTE LINK HERE..." class="flex-1 bg-transparent px-8 py-5 outline-none font-bold text-lg">
-                <button onclick="handleFetch()" class="bg-blue-600 px-12 py-5 rounded-[2.5rem] font-gaming font-black">FETCH</button>
-            </div>
-            <div id="loader" class="hidden text-center mb-8">
-                <div class="h-1 w-48 mx-auto bg-white/10 rounded-full overflow-hidden">
-                    <div class="h-full bg-blue-500 animate-pulse-line"></div>
-                </div>
-                <p class="text-[9px] mt-2 font-gaming animate-pulse">Establishing Tunnel...</p>
-            </div>
-            <div id="results" class="hidden grid grid-cols-1 md:grid-cols-2 gap-6"></div>
-        </section>
-
-        <section id="v2linkView" class="view hidden">
-            <div class="glass p-12 rounded-[3rem] text-center">
-                <i class="fas fa-link text-4xl text-blue-500 mb-4"></i>
-                <h3 class="font-gaming text-sm mb-6">VIDEO TO DIRECT LINK</h3>
-                <input type="file" id="vFile" class="hidden">
-                <label for="vFile" class="bg-white text-black px-10 py-4 rounded-xl font-bold text-xs cursor-pointer">UPLOAD VIDEO</label>
-                <div id="vLinkOut" class="mt-8 text-blue-400 font-bold"></div>
-            </div>
-        </section>
-
-        <section id="pdfView" class="view hidden">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="glass p-10 rounded-[2rem] text-center">
-                    <i class="fas fa-images text-3xl mb-4 text-blue-500"></i>
-                    <h4 class="font-gaming text-xs mb-4">IMG TO PDF</h4>
-                    <input type="file" id="pdfImg" multiple accept="image/*" class="hidden">
-                    <label for="pdfImg" class="bg-blue-600 px-6 py-2 rounded-lg text-[10px] font-bold cursor-pointer">SELECT</label>
-                </div>
-                <div class="glass p-10 rounded-[2rem] text-center">
-                    <i class="fas fa-lock text-3xl mb-4 text-red-500"></i>
-                    <h4 class="font-gaming text-xs mb-4">PDF SECURE</h4>
-                    <input type="file" id="pdfSec" accept="application/pdf" class="hidden">
-                    <label for="pdfSec" class="bg-red-600 px-6 py-2 rounded-lg text-[10px] font-bold cursor-pointer">ENCRYPT</label>
-                </div>
-            </div>
-        </section>
+        <div id="results" class="hidden grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
+            <div id="videoMeta" class="glass p-6 rounded-[2.5rem]"></div>
+            <div id="resOptions" class="space-y-3"></div>
+        </div>
     </main>
 
     <script>
-        const FLASK_API = "http://127.0.0.1:5000";
-        const RAPID_API = "https://social-download-all-in-one.p.rapidapi.com/v1/social/autolink";
-        const RAPID_KEY = "29f8c3b79amshc7b9755d426320dp1b94fajsn62b1821d47db";
+        const API = "http://127.0.0.1:5000";
 
-        // Navigation
-        function switchView(id) {
-            document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
-            document.querySelectorAll('.v-link').forEach(l => l.classList.remove('active'));
-            document.getElementById(id + 'View').classList.remove('hidden');
-            event.currentTarget.classList.add('active');
-        }
-
-        function toggleSettings() { document.getElementById('settingsPanel').classList.toggle('hidden'); }
-        function applyTheme(t) { document.getElementById('mainBody').className = 'theme-' + t; }
-
-        // --- DOWNLOADER LOGIC ---
-        async function handleFetch() {
-            const url = document.getElementById('mediaUrl').value;
-            if(!url) return;
+        async function fetchInfo() {
+            const url = document.getElementById('linkBox').value;
+            if(!url) return alert("Link kahan hai Boss?");
+            
             document.getElementById('loader').classList.remove('hidden');
             document.getElementById('results').classList.add('hidden');
 
-            if(url.includes('youtube.com') || url.includes('youtu.be')) {
-                fetchYouTube(url);
-            } else {
-                fetchSocial(url);
-            }
-        }
-
-        async function fetchYouTube(url) {
             try {
-                const infoRes = await fetch(`${FLASK_API}/video_info`, {
+                const infoRes = await fetch(`${API}/video_info`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({url: url})
                 });
                 const info = await infoRes.json();
-                
-                const resRes = await fetch(`${FLASK_API}/available_resolutions`, {
+
+                const resRes = await fetch(`${API}/available_resolutions`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({url: url})
                 });
                 const resData = await resRes.json();
 
-                renderResults(info.title, info.author, resData.progressive, url, true);
-            } catch(e) { alert("Flask API Offline! Run python main.py"); }
-            finally { document.getElementById('loader').classList.add('hidden'); }
+                showUI(info, resData.progressive, url);
+            } catch(e) {
+                alert("API Error! Terminal mein 'python main.py' chalao.");
+            } finally {
+                document.getElementById('loader').classList.add('hidden');
+            }
         }
 
-        async function fetchSocial(url) {
-            try {
-                const res = await fetch(RAPID_API, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json', 'X-RapidAPI-Key': RAPID_KEY},
-                    body: JSON.stringify({url: url})
-                });
-                const data = await res.json();
-                renderResults(data.title, data.source, data.medias.map(m => m.quality), url, false, data.medias);
-            } catch(e) { alert("RapidAPI Error"); }
-            finally { document.getElementById('loader').classList.add('hidden'); }
-        }
+        function showUI(info, resolutions, url) {
+            const results = document.getElementById('results');
+            const meta = document.getElementById('videoMeta');
+            const opts = document.getElementById('resOptions');
 
-        function renderResults(title, author, resolutions, url, isYT, medias = []) {
-            const out = document.getElementById('results');
-            out.classList.remove('hidden');
-            let buttons = resolutions.map((r, i) => `
-                <button onclick="${isYT ? `dlYT('${url}','${r}')` : `window.open('${medias[i].url}')`}" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl text-[10px] font-bold hover:bg-blue-600 transition-all">
-                    DOWNLOAD ${r}
+            results.classList.remove('hidden');
+            meta.innerHTML = `
+                <img src="${info.thumbnail}" class="w-full rounded-2xl mb-4">
+                <h3 class="font-bold text-sm">${info.title}</h3>
+                <p class="text-[10px] opacity-40 mt-1 uppercase">${info.author}</p>
+            `;
+
+            opts.innerHTML = `<p class="text-[10px] font-gaming mb-4 opacity-50">Select Quality</p>` + 
+                resolutions.map(r => `
+                <button onclick="downloadVideo('${url}', '${r}')" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl flex justify-between items-center hover:bg-blue-600 transition-all">
+                    <span class="font-bold text-xs">${r} MP4</span>
+                    <i class="fas fa-download opacity-40"></i>
                 </button>
             `).join('');
-            
-            out.innerHTML = `<div class="glass p-6 rounded-3xl">
-                <h3 class="font-bold text-sm mb-2">${title}</h3>
-                <p class="text-[10px] opacity-50 uppercase">${author}</p>
-            </div><div class="space-y-2">${buttons}</div>`;
         }
 
-        async function dlYT(url, res) {
-            alert("Download Started in Downloads Folder!");
-            await fetch(`${FLASK_API}/download/${res}`, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({url: url})
-            });
-        }
+        async function downloadVideo(url, res) {
+            document.getElementById('loader').classList.remove('hidden');
+            try {
+                const response = await fetch(`${API}/download/${res}`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({url: url})
+                });
 
-        // --- PDF LAB LOGIC ---
-        document.getElementById('pdfImg').addEventListener('change', async (e) => {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            const files = e.target.files;
-            for(let i=0; i<files.length; i++) {
-                const data = await new Promise(r => { const reader = new FileReader(); reader.onload=e=>r(e.target.result); reader.readAsDataURL(files[i]); });
-                if(i>0) doc.addPage();
-                doc.addImage(data, 'JPEG', 10, 10, 180, 150);
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const dlUrl = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = dlUrl;
+                    a.download = `AyanX_${res}.mp4`;
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                } else {
+                    alert("Download Failed!");
+                }
+            } catch(e) {
+                alert("Server Connection Lost!");
+            } finally {
+                document.getElementById('loader').classList.add('hidden');
             }
-            doc.save("AyanX_Converted.pdf");
-        });
-
-        document.getElementById('pdfSec').addEventListener('change', async (e) => {
-            alert("Security Protocol Initialized. Encrypting File...");
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(e.target.files[0]);
-            link.download = "Secured_AyanX.pdf";
-            link.click();
-        });
-
-        // --- V2LINK ---
-        document.getElementById('vFile').addEventListener('change', async (e) => {
-            document.getElementById('vLinkOut').innerText = "TUNNELING...";
-            const fd = new FormData(); fd.append('file', e.target.files[0]);
-            const r = await fetch('https://file.io', {method:'POST', body:fd});
-            const d = await r.json();
-            document.getElementById('vLinkOut').innerHTML = `LINK: <input readonly value="${d.link}" class="bg-blue-600 p-2 rounded ml-2">`;
-        });
+        }
     </script>
 </body>
 </html>
